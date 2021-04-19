@@ -1,0 +1,17 @@
+.content-header {
+  display: flex;
+  justify-content:space-between;
+  padding: 20px 0px;
+}
+
+.title-header {
+  color: rgb(255, 0, 0,0 0.8);
+  font-size: 20px;
+}
+
+.login-bt {
+  width: 200px;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+}
