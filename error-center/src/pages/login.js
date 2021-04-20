@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 import ErrorCenterContext from '../context/ErrorCenterContext';
-import Header from '../components/Header';
 import { useHistory } from 'react-router';
+import Header from '../components/Header';
+import * as api from '../services/api';
+import { setStorage } from '../services/localSorage';
 
 import './style.css';
 
@@ -10,7 +12,7 @@ export default function Login() {
 
   const { password, email } = login;
 
-  const minPasswordLength = 6;
+  const minPasswordLength = 3;
 
   const history = useHistory();
 
@@ -18,7 +20,14 @@ export default function Login() {
     setLogin({ ...login, [key]: value });
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    const response = await api.login(login);
+    // const { access_token, token_type, error } = response;
+    console.log('handleLogin')
+    console.log(response)
+    if (response.access_token) setStorage('token', response)
+
+
     setLogin({ ...login, isLogged: true });
     history.push('/');
   }
