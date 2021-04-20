@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router'
 import Header from '../components/Header';
 import { addUser } from '../services/api';
 
@@ -10,15 +11,29 @@ export default function EventForm() {
     password: '',
   })
 
+  const history = useHistory();
+
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // INSERIR AQUI
-    const response = await addUser(formValues);
+
+    // Atualizar posteriormente para retornar todo formValues
+    const data = {
+      email: formValues.email,
+      password: formValues.password,
+    }
+    const response = await addUser(data);
     console.log(response)
+    const { id, email, message, statusCode } = response;
+    if (id) {
+      alert(`Usuário ${email}, id:${id} criado com sucesso`);
+      history.push('/');
+    } else {
+      alert(`${message}, code: ${statusCode}`)
+    }
   }
 
   return (
