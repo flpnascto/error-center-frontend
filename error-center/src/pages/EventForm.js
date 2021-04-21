@@ -4,11 +4,9 @@ import Header from '../components/Header';
 import { getLevels, addEvent } from '../services/api';
 
 export default function EventForm() {
-  const { login } = useContext(ErrorCenterContext);
+  const { login, levelOptions } = useContext(ErrorCenterContext);
 
-  const options = ['error', 'warning', 'info'];
-
-  // const options = getLevels();
+  // const options = ['error', 'warning', 'info'];
 
   const [formValues, setFormValues] = useState({
     description: '',
@@ -17,7 +15,8 @@ export default function EventForm() {
     date: '',
     quantity: 0,
     user: login.email,
-    level: options[0],
+    levels: levelOptions,
+    selectedLevel: '',
   })
 
   const handleChange = ({ target: { value } }, key) => {
@@ -37,10 +36,10 @@ export default function EventForm() {
       <form className="content" onSubmit={handleSubmit}>
         <select
           className="form-input-text"
-          value={formValues.options}
-          onChange={(event) => handleChange(event, 'level')}
+          value={formValues.selectedLevel}
+          onChange={(event) => handleChange(event, 'selectedLevel')}
         >
-          {options.map((option, index) => (
+          {formValues.levels.map((option, index) => (
             <option key={index} value={option}>{option}</option>
           ))}
         </select>

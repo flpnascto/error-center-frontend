@@ -6,10 +6,15 @@ import * as api from '../services/api';
 
 
 export default function Welcome() {
-  const { login, setLogin } = useContext(ErrorCenterContext);
+  const { login, setLogin, setLevelOptions } = useContext(ErrorCenterContext);
   const history = useHistory();
 
-  const handleForm = () => history.push('/form');
+  const handleForm = async () => {
+    const reponse = await api.getLevels();
+    const options = reponse.map((e) => e.description);
+    setLevelOptions(options);
+    history.push('/form');
+  }
 
   const handleEventList = () => history.push('/events');
 

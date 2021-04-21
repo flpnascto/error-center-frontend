@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ErrorCenterContext from './ErrorCenterContext';
 
@@ -11,9 +11,13 @@ function Provider({ children }) {
     isLogged: false,
   });
 
+  const [levelOptions, setLevelOptions] = useState([]);
+
   const contextValue = {
     login,
     setLogin,
+    levelOptions,
+    setLevelOptions,
   };
 
   return (
