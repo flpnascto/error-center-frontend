@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import { useHistory } from 'react-router';
 import Header from '../components/Header';
@@ -8,28 +8,45 @@ import { setStorage } from '../services/localSorage';
 import './style.css';
 
 export default function Login() {
-  const { btActive, login, setLogin } = useContext(ErrorCenterContext);
+  const { login, setLogin } = useContext(ErrorCenterContext)
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: '',
+  })
+  const [btActive, setBtActive] = useState(true);
 
-  const { password, email } = login;
+  useEffect(() => {
+    const { email, password } = formValues;
+    const regexEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const verifyEmail = email.match(regexEmail);
+    const minPasswordLength = 5;
 
-  const minPasswordLength = 3;
+    if (verifyEmail && password.length >= minPasswordLength) {
+      setBtActive(true);
+    } else {
+      setBtActive(false);
+    }
+  }, [formValues]);
 
   const history = useHistory();
 
   const handleChange = ({ target: { value } }, key) => {
-    setLogin({ ...login, [key]: value });
+    setFormValues({ ...formValues, [key]: value });
   };
 
   const handleLogin = async () => {
-    const response = await api.login(login);
-    // const { access_token, token_type, error } = response;
+    const response = await api.getToken(formValues);
+    const { access_token, error, error_description } = response;
     console.log('handleLogin')
     console.log(response)
-    if (response.access_token) setStorage('token', response)
-
-
-    setLogin({ ...login, isLogged: true });
-    history.push('/');
+    if (access_token) {
+      setStorage('token', response);
+      setLogin({ ...login, isLogged: true });
+      history.push('/');
+    } else {
+      // Aprimorar retorno de ERRO
+      alert(`${error}, desrição: ${error_description}`)
+    }
   }
 
   return (
@@ -61,7 +78,7 @@ export default function Login() {
         <button
           className="form-button"
           type="button"
-          disabled={!btActive || password.length <= minPasswordLength}
+          disabled={!btActive}
           onClick={handleLogin}
         >
           Entrar
