@@ -46,13 +46,16 @@ async function addLevel(levelData) {
 
 async function getEvents() {
   const token = getStorage('token');
+  console.log('token api', token)
   const requestOptions = {
-    authorization: token.token_type + token.access_token,
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
   }
-  const requestResponse = fetch(URL + ENDPOINT.events, requestOptions)
-    .then((response) => response.json)
-  console.log('getEvents', requestResponse)
-  return requestResponse;
+  const request = await fetch(URL + ENDPOINT.events, requestOptions)
+  const response = await request.json();
+  console.log('getEvents', response)
+  return response;
 }
 
 async function addUser(userData) {
