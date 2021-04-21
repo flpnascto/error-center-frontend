@@ -34,18 +34,35 @@ export default function Login() {
     setFormValues({ ...formValues, [key]: value });
   };
 
-  const handleLogin = async () => {
+  const handleToken = async () => {
     const response = await api.getToken(formValues);
     const { access_token, error, error_description } = response;
     console.log('handleLogin')
     console.log(response)
     if (access_token) {
       setStorage('token', response);
-      setLogin({ ...login, isLogged: true });
-      history.push('/');
+      return true;
+    }
+
+    // Aprimorar retorno de ERRO
+    alert(`${error}, desrição: ${error_description}`)
+    return false;
+  }
+
+
+  const handleLogin = async () => {
+    const successToken = await handleToken();
+    if (successToken) {
+      const { firtname, lastname, email } = await api.login();
+      setLogin({
+        firtname,
+        lastname,
+        email,
+        isLogged: true
+      })
+      history.push('/')
     } else {
-      // Aprimorar retorno de ERRO
-      alert(`${error}, desrição: ${error_description}`)
+      setLogin({ ...login, isLogged: false })
     }
   }
 

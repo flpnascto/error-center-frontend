@@ -82,10 +82,24 @@ async function getToken({ email, password }) {
   return response;
 }
 
+async function login() {
+  const token = getStorage('token');
+  const requestOptions = {
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
+  }
+  const request = await fetch(URL + ENDPOINT.login, requestOptions)
+  const reponse = await request.json();
+  console.log('api Login', reponse)
+  return reponse;
+}
+
 export {
   getLevels,
   getEvents,
   addUser,
   addEvent,
   getToken,
+  login
 }
