@@ -2,8 +2,8 @@ import { getStorage } from './localSorage'
 
 
 // const URL = 'localhost:3000';
-// const URL = 'https://cors-anywhere.herokuapp.com/https://api-error-manager.herokuapp.com';
-const URL = 'https://api-error-manager.herokuapp.com';
+const URL = 'https://cors-anywhere.herokuapp.com/https://api-error-manager.herokuapp.com';
+// const URL = 'https://api-error-manager.herokuapp.com';
 
 
 const ENDPOINT = {
@@ -20,7 +20,9 @@ async function getLevels() {
   const token = getStorage('token');
   console.log('token api', token)
   const requestOptions = {
-    Authorization: 'Bearer ' + token.access_token,
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
   }
   console.log('requestOptions', requestOptions)
   const request = await fetch(URL + ENDPOINT.levels, requestOptions)

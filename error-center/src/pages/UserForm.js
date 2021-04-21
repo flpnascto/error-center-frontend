@@ -5,8 +5,8 @@ import { addUser } from '../services/api';
 
 export default function EventForm() {
   const [formValues, setFormValues] = useState({
-    name: '',
-    surname: '',
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
   })
@@ -21,11 +21,11 @@ export default function EventForm() {
     event.preventDefault();
 
     // Atualizar posteriormente para retornar todo formValues
-    const data = {
-      email: formValues.email,
-      password: formValues.password,
-    }
-    const response = await addUser(data);
+    // const data = {
+    //   email: formValues.email,
+    //   password: formValues.password,
+    // }
+    const response = await addUser(formValues);
     console.log(response)
     const { id, email, message, statusCode } = response;
     if (id) {
@@ -46,8 +46,8 @@ export default function EventForm() {
             className="form-input-text"
             id="name_form"
             type="text"
-            value={formValues.name}
-            onChange={(event) => handleChange(event, 'name')}
+            value={formValues.firstname}
+            onChange={(event) => handleChange(event, 'firstname')}
           />
         </label>
 
@@ -57,8 +57,8 @@ export default function EventForm() {
             className="form-input-text"
             id="surname_form"
             type="text"
-            value={formValues.surname}
-            onChange={(event) => handleChange(event, 'surname')}
+            value={formValues.lastname}
+            onChange={(event) => handleChange(event, 'lastname')}
           />
         </label>
 
