@@ -1,6 +1,5 @@
 import { getStorage } from './localSorage'
 
-
 // const URL = 'localhost:3000';
 const URL = 'https://cors-anywhere.herokuapp.com/https://api-error-manager.herokuapp.com';
 // const URL = 'https://api-error-manager.herokuapp.com';
@@ -65,24 +64,21 @@ async function addEvent(eventData) {
   // return response;
 }
 
-async function login({ email, password }) {
-  console.log('email', email)
-  console.log('pass', password)
+async function getToken({ email, password }) {
   const CLIENT = {
-    ID: 'client-id',
-    SECRET: 'client-secret',
+    ID: process.env.REACT_APP_ID,
+    SECRET: process.env.REACT_APP_SECRET,
   };
-
   const requestOptions = {
     method: 'POST',
     headers: {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
     },
-    body: `grant_type=password&username=${email}&password=${password}&scope=any&client_id=${CLIENT.ID}&client_secret=${CLIENT.SECRET}`,
+    body: `grant_type=password&username=${email}&password=${password}&scope=any` +
+      `&client_id=${CLIENT.ID}&client_secret=${CLIENT.SECRET}`,
   }
   const request = await fetch(URL + ENDPOINT.token, requestOptions);
   const response = await request.json();
-  console.log(response)
   return response;
 }
 
@@ -91,5 +87,5 @@ export {
   getEvents,
   addUser,
   addEvent,
-  login,
+  getToken,
 }
