@@ -15,6 +15,8 @@ export default function Welcome() {
 
   const handleNewUser = () => history.push('/user');
 
+  const handleNewLevel = () => history.push('/level');
+
   const logout = () => {
     setLogin({
       firstname: '',
@@ -67,6 +69,14 @@ export default function Welcome() {
           type="button"
           onClick={handleNewUser} >
           Cadastrar Usuário
+        </button>
+
+        <button
+          className="form-button"
+          type="button"
+          disabled={!login.isLogged}
+          onClick={handleNewLevel} >
+          Cadastrar Level
         </button>
 
         <button

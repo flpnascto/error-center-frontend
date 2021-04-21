@@ -23,10 +23,24 @@ async function getLevels() {
       Authorization: token.token_type + ' ' + token.access_token,
     }
   }
-  console.log('requestOptions', requestOptions)
   const request = await fetch(URL + ENDPOINT.levels, requestOptions)
   const response = await request.json();
-  console.log('fetLevels', response)
+  return response;
+}
+
+async function addLevel(levelData) {
+  const token = getStorage('token');
+  console.log('token api', token)
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(levelData),
+  }
+  const request = await fetch(URL + ENDPOINT.levels, requestOptions)
+  const response = await request.json();
   return response;
 }
 
@@ -97,6 +111,7 @@ async function login() {
 
 export {
   getLevels,
+  addLevel,
   getEvents,
   addUser,
   addEvent,
