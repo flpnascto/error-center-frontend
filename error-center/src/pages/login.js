@@ -53,9 +53,9 @@ export default function Login() {
   const handleLogin = async () => {
     const successToken = await handleToken();
     if (successToken) {
-      const { firtname, lastname, email } = await api.login();
+      const { firstname, lastname, email } = await api.login();
       setLogin({
-        firtname,
+        firstname,
         lastname,
         email,
         isLogged: true

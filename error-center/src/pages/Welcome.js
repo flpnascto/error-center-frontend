@@ -17,8 +17,9 @@ export default function Welcome() {
 
   const logout = () => {
     setLogin({
+      firstname: '',
+      lastname: '',
       email: '',
-      password: '',
       isLogged: false,
     });
     localStorage.clear();
@@ -29,7 +30,7 @@ export default function Welcome() {
   </div>)
 
   const logged = (<div className="title">
-    Olá, <strong>{login.email}</strong>, seja bem vindo ao sistema!
+    Olá, <strong>{login.firstname + ' ' + login.lastname}</strong>, seja bem vindo ao sistema!
   </div>)
 
   const testApi = async () => {
