@@ -10,9 +10,9 @@ export default function Welcome() {
   const history = useHistory();
 
   const handleForm = async () => {
-    const reponse = await api.getLevels();
-    const options = reponse.map((e) => e.description);
-    setLevelOptions(options);
+    const optionsResponse = await api.getLevels();
+    // const options = reponse.map((e) => e.description);
+    setLevelOptions(optionsResponse);
     history.push('/form');
   }
 

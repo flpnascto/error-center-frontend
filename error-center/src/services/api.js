@@ -67,15 +67,19 @@ async function addUser(userData) {
 }
 
 async function addEvent(eventData) {
+  const token = getStorage('token');
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(eventData)
   }
   console.log(requestOptions)
-  // const request = await fetch(`${ URL } ${ ENDPOINT.events } `, requestOptions);
-  // const response = await request.json();
-  // return response;
+  const request = await fetch(URL + ENDPOINT.newEvent, requestOptions);
+  const response = await request.json();
+  return response;
 }
 
 async function getToken({ email, password }) {

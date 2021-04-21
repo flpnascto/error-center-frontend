@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import Header from '../components/Header';
-import { getLevels, addEvent } from '../services/api';
+import { addEvent } from '../services/api';
+import { useHistory } from 'react-router';
 
 export default function EventForm() {
   const { login, levelOptions } = useContext(ErrorCenterContext);
-
-  // const options = ['error', 'warning', 'info'];
 
   const [formValues, setFormValues] = useState({
     description: '',
@@ -16,8 +15,10 @@ export default function EventForm() {
     quantity: 0,
     user: login.email,
     levels: levelOptions,
-    selectedLevel: '',
+    selectedLevel: levelOptions[0].id,
   })
+
+  const history = useHistory();
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
@@ -25,9 +26,24 @@ export default function EventForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // INSERIR AQUI
-    const response = await addEvent(formValues);
-    console.log(response)
+    const eventData = {
+      date: formValues.date,
+      description: formValues.description,
+      level: parseInt(formValues.selectedLevel, 10),
+      log: formValues.log,
+      origin: formValues.origin,
+      quantity: formValues.quantity,
+      user: login.email,
+    }
+    const response = await addEvent(eventData);
+    const { id, message, statusCode } = response;
+    if (id) {
+      alert('Evento cadastrado com sucesso');
+      history.push('/');
+    } else {
+      alert(`${message}, code: ${statusCode}`)
+    }
+
   }
 
   return (
@@ -40,7 +56,7 @@ export default function EventForm() {
           onChange={(event) => handleChange(event, 'selectedLevel')}
         >
           {formValues.levels.map((option, index) => (
-            <option key={index} value={option}>{option}</option>
+            <option key={index} value={option.id}>{option.description}</option>
           ))}
         </select>
 
@@ -96,17 +112,6 @@ export default function EventForm() {
             type="number"
             value={formValues.quantity}
             onChange={(event) => handleChange(event, 'quantity')}
-          />
-        </label>
-
-        <label className="form-label" htmlFor="user_form">
-          Usuário:
-            <input
-            className="form-input-text"
-            id="user_form"
-            type="text"
-            value={formValues.user}
-            onChange={(event) => handleChange(event, 'user')}
           />
         </label>
 
