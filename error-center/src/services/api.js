@@ -9,9 +9,9 @@ const ENDPOINT = {
   levels: '/level',
   login: '/login',
   newEvent: '/event',
-  events: '/event/all',
+  events: '/event',
   newUser: '/user',
-  users: '/user/all',
+  users: '/user',
   token: '/oauth/token'
 }
 
