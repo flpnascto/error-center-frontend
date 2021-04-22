@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import { useHistory } from 'react-router';
 import Header from '../components/Header';
+import ErrorResponse from '../components/ErrorResponse';
 import * as api from '../services/api';
 import { setStorage } from '../services/localSorage';
 
@@ -9,6 +10,13 @@ import './style.css';
 
 export default function Login() {
   const { login, setLogin } = useContext(ErrorCenterContext)
+
+  const [infoMensage, setInfoMessage] = useState({
+    message: '',
+    status: false,
+    isEnable: false,
+  });
+
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
@@ -32,26 +40,29 @@ export default function Login() {
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
+    setInfoMessage({ isEnable: false });
   };
 
   const handleToken = async () => {
     const response = await api.getToken(formValues);
-    const { access_token, error, error_description } = response;
-    console.log('handleLogin')
-    console.log(response)
+    const { access_token } = response;
+
     if (access_token) {
       setStorage('token', response);
       return true;
     }
 
-    // Aprimorar retorno de ERRO
-    alert(`${error}, desrição: ${error_description}`)
+    setInfoMessage({
+      message: 'Usuário e/ou senha inválidos',
+      status: false,
+      isEnable: true
+    });
     return false;
-  }
-
+  };
 
   const handleLogin = async () => {
     const successToken = await handleToken();
+
     if (successToken) {
       const { firstname, lastname, email } = await api.login();
       setLogin({
@@ -62,13 +73,16 @@ export default function Login() {
       })
       history.push('/')
     } else {
-      setLogin({ ...login, isLogged: false })
+      setLogin({ ...login, isLogged: false });
     }
-  }
+  };
 
   return (
     <div>
       <Header />
+      {infoMensage.isEnable &&
+        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
+      }
       <div className="content">
         <label className="form-label" htmlFor="email">
           Email:
@@ -103,4 +117,4 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};

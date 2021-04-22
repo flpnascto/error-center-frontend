@@ -1,35 +1,51 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
 import Header from '../components/Header';
+import ErrorResponse from '../components/ErrorResponse';
 import { addLevel } from '../services/api';
 
 export default function LevelForm() {
+  const [infoMensage, setInfoMessage] = useState({
+    message: '',
+    status: false,
+    isEnable: false,
+  });
+
   const [formValues, setFormValues] = useState({
     description: '',
   });
 
-  const history = useHistory();
-
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
+    setInfoMessage({ isEnable: false });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await addLevel(formValues);
+
     const { id, description, message } = response;
+
     if (id) {
-      alert(`Level "${description}" adiconado com sucesso`);
-      history.push('/')
+      setInfoMessage({
+        message: `Level "${description} adiconado com sucesso`,
+        status: true,
+        isEnable: true
+      })
     } else {
-      alert(`Não foi possível realizar o cadastro do level.` +
-        `\nErro: ${message}`)
+      setInfoMessage({
+        message: message,
+        status: false,
+        isEnable: true
+      })
     }
   };
 
   return (
     <div>
       <Header />
+      {infoMensage.isEnable &&
+        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
+      }
       <form className="content" onSubmit={handleSubmit}>
         <label className="form-label" htmlFor="namedescription_form">
           Descrição:
@@ -47,5 +63,4 @@ export default function LevelForm() {
       </form>
     </div>
   );
-
-}
+};

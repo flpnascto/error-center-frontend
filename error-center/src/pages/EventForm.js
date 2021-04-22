@@ -1,11 +1,17 @@
 import React, { useContext, useState } from 'react';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import Header from '../components/Header';
+import ErrorResponse from '../components/ErrorResponse';
 import { addEvent } from '../services/api';
-import { useHistory } from 'react-router';
 
 export default function EventForm() {
   const { login, levelOptions } = useContext(ErrorCenterContext);
+
+  const [infoMensage, setInfoMessage] = useState({
+    message: '',
+    status: false,
+    isEnable: false,
+  });
 
   const [formValues, setFormValues] = useState({
     description: '',
@@ -16,12 +22,11 @@ export default function EventForm() {
     user: login.email,
     levels: levelOptions,
     selectedLevel: levelOptions[0].id,
-  })
-
-  const history = useHistory();
+  });
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
+    setInfoMessage({ isEnable: false })
   };
 
   const handleSubmit = async (event) => {
@@ -33,22 +38,33 @@ export default function EventForm() {
       log: formValues.log,
       origin: formValues.origin,
       quantity: formValues.quantity,
-      user: login.email,
-    }
-    const response = await addEvent(eventData);
-    const { id, message, statusCode } = response;
-    if (id) {
-      alert('Evento cadastrado com sucesso');
-      history.push('/');
-    } else {
-      alert(`${message}, code: ${statusCode}`)
-    }
+    };
 
-  }
+    const response = await addEvent(eventData);
+
+    const { id, message } = response;
+
+    if (id) {
+      setInfoMessage({
+        message: 'Evento cadastrado com sucesso',
+        status: true,
+        isEnable: true
+      })
+    } else {
+      setInfoMessage({
+        message: message,
+        status: false,
+        isEnable: true
+      })
+    }
+  };
 
   return (
     <div>
       <Header />
+      {infoMensage.isEnable &&
+        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
+      }
       <form className="content" onSubmit={handleSubmit}>
         <select
           className="form-input-text"
@@ -119,4 +135,4 @@ export default function EventForm() {
       </form>
     </div>
   );
-}
+};
