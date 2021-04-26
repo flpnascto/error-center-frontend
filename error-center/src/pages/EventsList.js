@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Header from '../components/Header';
+import ErrorCenterContext from '../context/ErrorCenterContext';
 import { getEvents } from '../services/api';
 
 export default function EventsList() {
 
-  const [data, setData] = useState([]);
+  const { apiData, setApiData, filterOptions } = useContext(ErrorCenterContext);
 
   useEffect(() => {
     async function fetchEvents() {
-      const response = await getEvents();
-      setData(response);
+      const response = await getEvents(filterOptions);
+      setApiData(response);
     }
     fetchEvents();
-  }, [setData]);
+  }, [filterOptions, setApiData]);
 
   return (
     <div>
@@ -31,14 +32,14 @@ export default function EventsList() {
           </thead>
           <tbody>
             {
-              data.map((item) => (
+              apiData.map((item) => (
                 <tr key={item.id} >
-                  <td className="row-text-center" >{item.levelDescription}</td>
+                  <td className="row-text-center" >{item.level}</td>
                   <td>{item.description}</td>
                   <td>{item.origin}</td>
                   <td className="row-text-center" >{item.date}</td>
                   <td className="row-text-center" >{item.quantity}</td>
-                  <td>{item.userEmail}</td>
+                  <td>{item.user}</td>
                 </tr>
               ))
             }

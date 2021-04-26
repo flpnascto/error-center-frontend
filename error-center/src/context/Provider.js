@@ -13,11 +13,32 @@ function Provider({ children }) {
 
   const [levelOptions, setLevelOptions] = useState([]);
 
+  const [apiData, setApiData] = useState([]);
+
+  const [filterOptions, setFilterOptions] = useState({
+    description: '',
+    origin: '',
+    date: '',
+    quantity: '',
+    level: '',
+    email: '',
+    page: 1,
+    size: 50,
+  });
+
+  const handleFilterOptions = ({ target: { value } }, key) => {
+    setFilterOptions({ ...filterOptions, [key]: value });
+  };
+
   const contextValue = {
     login,
     setLogin,
     levelOptions,
     setLevelOptions,
+    apiData,
+    setApiData,
+    filterOptions,
+    handleFilterOptions,
   };
 
   return (

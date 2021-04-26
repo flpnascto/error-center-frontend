@@ -44,7 +44,7 @@ async function addLevel(levelData) {
   return response;
 }
 
-async function getEvents() {
+async function getEvents(filterOptions) {
   const token = getStorage('token');
   console.log('token api', token)
   const requestOptions = {
@@ -52,7 +52,10 @@ async function getEvents() {
       Authorization: token.token_type + ' ' + token.access_token,
     }
   }
-  const request = await fetch(URL + ENDPOINT.events, requestOptions)
+  const { description, origin, date, quantity, email, level } = filterOptions;
+  const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
+    `&email=${email}&level=${level}`;
+  const request = await fetch(URL + ENDPOINT.events + query, requestOptions)
   const response = await request.json();
   console.log('getEvents', response)
   return response;
