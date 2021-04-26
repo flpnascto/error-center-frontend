@@ -52,12 +52,14 @@ async function getEvents(filterOptions) {
       Authorization: token.token_type + ' ' + token.access_token,
     }
   }
-  const { description, origin, date, quantity, email, level } = filterOptions;
+  const { description, origin, date, quantity, user, level } = filterOptions;
   const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
-    `&email=${email}&level=${level}`;
+    `&user=${user}&level=${level}`;
+  console.log('endpoit', URL + ENDPOINT.events + query)
   const request = await fetch(URL + ENDPOINT.events + query, requestOptions)
   const response = await request.json();
   console.log('getEvents', response)
+  if (response.message) return []
   return response;
 }
 
