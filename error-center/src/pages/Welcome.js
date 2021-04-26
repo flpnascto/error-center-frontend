@@ -2,24 +2,34 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import Header from '../components/Header';
 import ErrorCenterContext from '../context/ErrorCenterContext';
+import * as api from '../services/api';
 
 
 export default function Welcome() {
-  const { login, setLogin } = useContext(ErrorCenterContext);
+  const { login, setLogin, setLevelOptions } = useContext(ErrorCenterContext);
   const history = useHistory();
 
-  const handleForm = () => history.push('/form');
+  const handleForm = async () => {
+    const optionsResponse = await api.getLevels();
+    // const options = reponse.map((e) => e.description);
+    setLevelOptions(optionsResponse);
+    history.push('/form');
+  }
 
   const handleEventList = () => history.push('/events');
 
   const handleNewUser = () => history.push('/user');
 
+  const handleNewLevel = () => history.push('/level');
+
   const logout = () => {
     setLogin({
+      firstname: '',
+      lastname: '',
       email: '',
-      password: '',
       isLogged: false,
     });
+    localStorage.clear();
   }
 
   const doLogin = (<div className="title">
@@ -27,8 +37,14 @@ export default function Welcome() {
   </div>)
 
   const logged = (<div className="title">
-    Olá, <strong>{login.email}</strong>, seja bem vindo ao sistema!
+    Olá, <strong>{login.firstname + ' ' + login.lastname}</strong>, seja bem vindo ao sistema!
   </div>)
+
+  const testApi = async () => {
+    const response = await api.getLevels();
+    console.log('testAPI')
+    console.log(response);
+  }
 
   return (
     <div>
@@ -64,8 +80,23 @@ export default function Welcome() {
           className="form-button"
           type="button"
           disabled={!login.isLogged}
+          onClick={handleNewLevel} >
+          Cadastrar Level
+        </button>
+
+        <button
+          className="form-button"
+          type="button"
+          disabled={!login.isLogged}
           onClick={logout} >
           Sair
+        </button>
+
+        <button
+          className="form-button"
+          type="button"
+          onClick={testApi} >
+          API Teste Requests
         </button>
 
       </div>

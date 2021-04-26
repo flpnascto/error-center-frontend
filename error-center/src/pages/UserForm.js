@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router'
 import Header from '../components/Header';
 import { addUser } from '../services/api';
 
 export default function EventForm() {
   const [formValues, setFormValues] = useState({
-    name: '',
-    surname: '',
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
   })
+
+  const history = useHistory();
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
@@ -16,9 +19,21 @@ export default function EventForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // INSERIR AQUI
+
+    // Atualizar posteriormente para retornar todo formValues
+    // const data = {
+    //   email: formValues.email,
+    //   password: formValues.password,
+    // }
     const response = await addUser(formValues);
     console.log(response)
+    const { id, email, message, statusCode } = response;
+    if (id) {
+      alert(`Usuário ${email}, id:${id} criado com sucesso`);
+      history.push('/');
+    } else {
+      alert(`${message}, code: ${statusCode}`)
+    }
   }
 
   return (
@@ -31,8 +46,8 @@ export default function EventForm() {
             className="form-input-text"
             id="name_form"
             type="text"
-            value={formValues.name}
-            onChange={(event) => handleChange(event, 'name')}
+            value={formValues.firstname}
+            onChange={(event) => handleChange(event, 'firstname')}
           />
         </label>
 
@@ -42,8 +57,8 @@ export default function EventForm() {
             className="form-input-text"
             id="surname_form"
             type="text"
-            value={formValues.surname}
-            onChange={(event) => handleChange(event, 'surname')}
+            value={formValues.lastname}
+            onChange={(event) => handleChange(event, 'lastname')}
           />
         </label>
 

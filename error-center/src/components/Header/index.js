@@ -25,7 +25,7 @@ export default function Header() {
           </button>)
         }
 
-        {login.isLogged && (<div>{login.email.split("@")[0]}</div>)}
+        {login.isLogged && (<div>{login.firstname}</div>)}
 
       </header>
     </div>

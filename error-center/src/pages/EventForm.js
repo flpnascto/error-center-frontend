@@ -1,14 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import Header from '../components/Header';
-import { getLevels, addEvent } from '../services/api';
+import ErrorResponse from '../components/ErrorResponse';
+import { addEvent } from '../services/api';
 
 export default function EventForm() {
-  const { login } = useContext(ErrorCenterContext);
+  const { login, levelOptions } = useContext(ErrorCenterContext);
 
-  const options = ['error', 'warning', 'info'];
-
-  // const options = getLevels();
+  const [infoMensage, setInfoMessage] = useState({
+    message: '',
+    status: false,
+    isEnable: false,
+  });
 
   const [formValues, setFormValues] = useState({
     description: '',
@@ -17,31 +20,59 @@ export default function EventForm() {
     date: '',
     quantity: 0,
     user: login.email,
-    level: options[0],
-  })
+    levels: levelOptions,
+    selectedLevel: levelOptions[0].id,
+  });
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
+    setInfoMessage({ isEnable: false })
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // INSERIR AQUI
-    const response = await addEvent(formValues);
-    console.log(response)
-  }
+    const eventData = {
+      date: formValues.date,
+      description: formValues.description,
+      level: parseInt(formValues.selectedLevel, 10),
+      log: formValues.log,
+      origin: formValues.origin,
+      quantity: formValues.quantity,
+    };
+
+    const response = await addEvent(eventData);
+
+    const { id, message } = response;
+
+    if (id) {
+      setInfoMessage({
+        message: 'Evento cadastrado com sucesso',
+        status: true,
+        isEnable: true
+      })
+    } else {
+      setInfoMessage({
+        message: message,
+        status: false,
+        isEnable: true
+      })
+    }
+  };
 
   return (
     <div>
       <Header />
+      {infoMensage.isEnable &&
+        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
+      }
       <form className="content" onSubmit={handleSubmit}>
         <select
           className="form-input-text"
-          value={formValues.options}
-          onChange={(event) => handleChange(event, 'level')}
+          value={formValues.selectedLevel}
+          onChange={(event) => handleChange(event, 'selectedLevel')}
         >
-          {options.map((option, index) => (
-            <option key={index} value={option}>{option}</option>
+          {formValues.levels.map((option, index) => (
+            <option key={index} value={option.id}>{option.description}</option>
           ))}
         </select>
 
@@ -100,19 +131,8 @@ export default function EventForm() {
           />
         </label>
 
-        <label className="form-label" htmlFor="user_form">
-          Usuário:
-            <input
-            className="form-input-text"
-            id="user_form"
-            type="text"
-            value={formValues.user}
-            onChange={(event) => handleChange(event, 'user')}
-          />
-        </label>
-
         <input className="form-button" type="submit" value="Adicionar evento" />
       </form>
     </div>
   );
-}
+};

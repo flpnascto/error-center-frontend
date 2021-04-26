@@ -1,22 +1,64 @@
-const URL = 'localhost:3000';
+import { getStorage } from './localSorage'
+
+// const URL = 'localhost:3000';
+const URL = 'https://cors-anywhere.herokuapp.com/https://api-error-manager.herokuapp.com';
+// const URL = 'https://api-error-manager.herokuapp.com';
+
 
 const ENDPOINT = {
   levels: '/level',
   login: '/login',
   newEvent: '/event',
-  events: '/event/all',
+  events: '/event',
+  newUser: '/user',
+  users: '/user',
+  token: '/oauth/token'
 }
 
-async function getLevels(key) {
-  const requestResponse = fetch(`${URL}${ENDPOINT['levels']}`)
-    .then((response) => response.json)
-  return requestResponse;
+async function getLevels() {
+  const token = getStorage('token');
+  console.log('token api', token)
+  const requestOptions = {
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
+  }
+  const request = await fetch(URL + ENDPOINT.levels, requestOptions)
+  const response = await request.json();
+  return response;
 }
 
-async function getEvents() {
-  const requestResponse = fetch(`${URL}${ENDPOINT['events']}`)
-    .then((response) => response.json)
-  return requestResponse;
+async function addLevel(levelData) {
+  const token = getStorage('token');
+  console.log('token api', token)
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(levelData),
+  }
+  const request = await fetch(URL + ENDPOINT.levels, requestOptions)
+  const response = await request.json();
+  return response;
+}
+
+async function getEvents(filterOptions) {
+  const token = getStorage('token');
+  console.log('token api', token)
+  const requestOptions = {
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
+  }
+  const { description, origin, date, quantity, email, level } = filterOptions;
+  const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
+    `&email=${email}&level=${level}`;
+  const request = await fetch(URL + ENDPOINT.events + query, requestOptions)
+  const response = await request.json();
+  console.log('getEvents', response)
+  return response;
 }
 
 async function addUser(userData) {
@@ -25,40 +67,64 @@ async function addUser(userData) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(userData),
   }
-  console.log(requestOptions)
-  // const request = await fetch(`${URL}${ENDPOINT['user']}`, requestOptions);
-  // const reponse = await request.json();
-  // return reponse;
+  const request = await fetch(URL + ENDPOINT.newUser, requestOptions);
+  const response = request.json();
+  return response;
 }
 
 async function addEvent(eventData) {
+  const token = getStorage('token');
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(eventData)
   }
   console.log(requestOptions)
-  // const request = await fetch(`${URL}${ENDPOINT['events']}`, requestOptions);
-  // const reponse = await request.json();
-  // return reponse;
+  const request = await fetch(URL + ENDPOINT.newEvent, requestOptions);
+  const response = await request.json();
+  return response;
 }
 
-async function login(loginData) {
+async function getToken({ email, password }) {
+  const CLIENT = {
+    ID: process.env.REACT_APP_ID,
+    SECRET: process.env.REACT_APP_SECRET,
+  };
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(loginData),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+    },
+    body: `grant_type=password&username=${email}&password=${password}&scope=any` +
+      `&client_id=${CLIENT.ID}&client_secret=${CLIENT.SECRET}`,
   }
-  console.log(requestOptions)
-  // const request = await fetch(`${URL}${ENDPOINT['login']}`, requestOptions);
-  // const reponse = await request.json();
-  // return reponse;
+  const request = await fetch(URL + ENDPOINT.token, requestOptions);
+  const response = await request.json();
+  return response;
+}
+
+async function login() {
+  const token = getStorage('token');
+  const requestOptions = {
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
+  }
+  const request = await fetch(URL + ENDPOINT.login, requestOptions)
+  const reponse = await request.json();
+  console.log('api Login', reponse)
+  return reponse;
 }
 
 export {
   getLevels,
+  addLevel,
   getEvents,
   addUser,
   addEvent,
-  login,
+  getToken,
+  login
 }

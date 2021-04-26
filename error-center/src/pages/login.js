@@ -1,31 +1,88 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ErrorCenterContext from '../context/ErrorCenterContext';
-import Header from '../components/Header';
 import { useHistory } from 'react-router';
+import Header from '../components/Header';
+import ErrorResponse from '../components/ErrorResponse';
+import * as api from '../services/api';
+import { setStorage } from '../services/localSorage';
 
 import './style.css';
 
 export default function Login() {
-  const { btActive, login, setLogin } = useContext(ErrorCenterContext);
+  const { login, setLogin } = useContext(ErrorCenterContext)
 
-  const { password, email } = login;
+  const [infoMensage, setInfoMessage] = useState({
+    message: '',
+    status: false,
+    isEnable: false,
+  });
 
-  const minPasswordLength = 6;
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: '',
+  })
+  const [btActive, setBtActive] = useState(true);
+
+  useEffect(() => {
+    const { email, password } = formValues;
+    const regexEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const verifyEmail = email.match(regexEmail);
+    const minPasswordLength = 5;
+
+    if (verifyEmail && password.length >= minPasswordLength) {
+      setBtActive(true);
+    } else {
+      setBtActive(false);
+    }
+  }, [formValues]);
 
   const history = useHistory();
 
   const handleChange = ({ target: { value } }, key) => {
-    setLogin({ ...login, [key]: value });
+    setFormValues({ ...formValues, [key]: value });
+    setInfoMessage({ isEnable: false });
   };
 
-  const handleLogin = () => {
-    setLogin({ ...login, isLogged: true });
-    history.push('/');
-  }
+  const handleToken = async () => {
+    const response = await api.getToken(formValues);
+    const { access_token } = response;
+
+    if (access_token) {
+      setStorage('token', response);
+      return true;
+    }
+
+    setInfoMessage({
+      message: 'Usuário e/ou senha inválidos',
+      status: false,
+      isEnable: true
+    });
+    return false;
+  };
+
+  const handleLogin = async () => {
+    const successToken = await handleToken();
+
+    if (successToken) {
+      const { firstname, lastname, email } = await api.login();
+      setLogin({
+        firstname,
+        lastname,
+        email,
+        isLogged: true
+      })
+      history.push('/')
+    } else {
+      setLogin({ ...login, isLogged: false });
+    }
+  };
 
   return (
     <div>
       <Header />
+      {infoMensage.isEnable &&
+        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
+      }
       <div className="content">
         <label className="form-label" htmlFor="email">
           Email:
@@ -52,7 +109,7 @@ export default function Login() {
         <button
           className="form-button"
           type="button"
-          disabled={!btActive || password.length <= minPasswordLength}
+          disabled={!btActive}
           onClick={handleLogin}
         >
           Entrar
@@ -60,4 +117,4 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
