@@ -26,10 +26,6 @@ function Provider({ children }) {
     size: 50,
   });
 
-  const handleFilterOptions = ({ target: { value } }, key) => {
-    setFilterOptions({ ...filterOptions, [key]: value });
-  };
-
   const contextValue = {
     login,
     setLogin,
@@ -38,7 +34,7 @@ function Provider({ children }) {
     apiData,
     setApiData,
     filterOptions,
-    handleFilterOptions,
+    setFilterOptions,
   };
 
   return (
