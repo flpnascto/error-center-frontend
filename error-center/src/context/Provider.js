@@ -21,7 +21,7 @@ function Provider({ children }) {
     date: '',
     quantity: '',
     level: '',
-    email: '',
+    user: '',
     page: 1,
     size: 50,
   });

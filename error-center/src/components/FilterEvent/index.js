@@ -22,6 +22,7 @@ export default function FilterEvent() {
     quantity: '',
     levels: levelOptions,
     selectedLevel: '',
+    user: '',
   });
 
   const handleChange = ({ target: { value } }, key) => {
