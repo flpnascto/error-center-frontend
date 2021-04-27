@@ -1,9 +1,6 @@
 import { getStorage } from './localSorage'
 
-// const URL = 'localhost:3000';
-const URL = 'https://cors-anywhere.herokuapp.com/https://api-error-manager.herokuapp.com';
-// const URL = 'https://api-error-manager.herokuapp.com';
-
+const URL = process.env.REACT_APP_ENDPOINT;
 
 const ENDPOINT = {
   levels: '/level',
@@ -52,12 +49,14 @@ async function getEvents(filterOptions) {
       Authorization: token.token_type + ' ' + token.access_token,
     }
   }
-  const { description, origin, date, quantity, email, level } = filterOptions;
+  const { description, origin, date, quantity, user, level } = filterOptions;
   const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
-    `&email=${email}&level=${level}`;
+    `&user=${user}&level=${level}`;
+  console.log('endpoit', URL + ENDPOINT.events + query)
   const request = await fetch(URL + ENDPOINT.events + query, requestOptions)
   const response = await request.json();
   console.log('getEvents', response)
+  if (response.message) return []
   return response;
 }
 

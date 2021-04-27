@@ -21,14 +21,10 @@ function Provider({ children }) {
     date: '',
     quantity: '',
     level: '',
-    email: '',
+    user: '',
     page: 1,
     size: 50,
   });
-
-  const handleFilterOptions = ({ target: { value } }, key) => {
-    setFilterOptions({ ...filterOptions, [key]: value });
-  };
 
   const contextValue = {
     login,
@@ -38,7 +34,7 @@ function Provider({ children }) {
     apiData,
     setApiData,
     filterOptions,
-    handleFilterOptions,
+    setFilterOptions,
   };
 
   return (

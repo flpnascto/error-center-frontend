@@ -16,7 +16,12 @@ export default function Welcome() {
     history.push('/form');
   }
 
-  const handleEventList = () => history.push('/events');
+  const handleEventList = async () => {
+    const optionsResponse = await api.getLevels();
+    // const options = reponse.map((e) => e.description);
+    setLevelOptions(optionsResponse);
+    history.push('/events');
+  }
 
   const handleNewUser = () => history.push('/user');
 
@@ -66,7 +71,7 @@ export default function Welcome() {
           type="button"
           disabled={!login.isLogged}
           onClick={handleEventList} >
-          Listar Evento
+          Listar Eventos
         </button>
 
         <button
