@@ -1,9 +1,6 @@
 import { getStorage } from './localSorage'
 
-// const URL = 'localhost:3000';
-const URL = 'https://cors-anywhere.herokuapp.com/https://api-error-manager.herokuapp.com';
-// const URL = 'https://api-error-manager.herokuapp.com';
-
+const URL = process.env.REACT_APP_ENDPOINT;
 
 const ENDPOINT = {
   levels: '/level',
