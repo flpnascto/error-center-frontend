@@ -11,9 +11,15 @@ export default function Header() {
   return (
     <div>
       <header className="content-header">
-        <img src="https://contaazul.com/wp-content/themes/assets/general/divorce/layout/images/logo.svg" alt="Conta Azul" width="200px"></img>
+        <a href="/">
+          <img
+            src="https://contaazul.com/wp-content/themes/assets/general/divorce/layout/images/logo.svg"
+            alt="Conta Azul"
+            width="200px">
+          </img>
+        </a>
 
-        <div className="title-header" >Aceleração - Grupo X</div>
+        <div className="title-header" >Aceleração - Grupo 3</div>
 
         {!login.isLogged &&
           (<button

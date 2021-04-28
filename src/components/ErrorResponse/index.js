@@ -15,7 +15,7 @@ export default function ErrorResponse({ message, status }) {
       {!status &&
         (<div className='error__negative'>Ocorreu um erro. {message}.</div>)
       }
-      <button className='error__button' onClick={() => history.goBack()}>Voltar</button>
+      <button className='top-button' onClick={() => history.goBack()}>Voltar</button>
     </div>
   );
 };
