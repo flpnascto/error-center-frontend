@@ -30,13 +30,14 @@ export default function LevelForm() {
         message: `Level "${description} adiconado com sucesso`,
         status: true,
         isEnable: true
-      })
+      });
+      setFormValues({ description: '' });
     } else {
       setInfoMessage({
         message: message,
         status: false,
         isEnable: true
-      })
+      });
     }
   };
 
