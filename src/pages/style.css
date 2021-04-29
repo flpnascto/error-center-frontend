@@ -1,7 +1,13 @@
 .content {
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
+}
+
+.content-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .title {
@@ -22,6 +28,18 @@
   outline: 0;
   width: 100%;
 
+}
+
+.top-button {
+  background-color: #00AFFA;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  height: 26px;
+  padding: 0 12px;
+  text-align: center;
 }
 
 .form-label {

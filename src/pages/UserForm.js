@@ -1,44 +1,56 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router'
 import Header from '../components/Header';
+import ErrorResponse from '../components/ErrorResponse';
 import { addUser } from '../services/api';
 
 export default function EventForm() {
-  const [formValues, setFormValues] = useState({
+  const [infoMensage, setInfoMessage] = useState({
+    message: '',
+    status: false,
+    isEnable: false,
+  });
+
+  const formValuesInitialState = {
     firstname: '',
     lastname: '',
     email: '',
     password: '',
-  })
+  }
 
-  const history = useHistory();
+  const [formValues, setFormValues] = useState(formValuesInitialState)
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
+    setInfoMessage({ isEnable: false })
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Atualizar posteriormente para retornar todo formValues
-    // const data = {
-    //   email: formValues.email,
-    //   password: formValues.password,
-    // }
     const response = await addUser(formValues);
     console.log(response)
-    const { id, email, message, statusCode } = response;
-    if (id) {
-      alert(`Usuário ${email}, id:${id} criado com sucesso`);
-      history.push('/');
+    const { email, error } = response;
+    if (email) {
+      setInfoMessage({
+        message: 'Usuário cadastrado com sucesso',
+        status: true,
+        isEnable: true
+      });
+      setFormValues(formValuesInitialState);
     } else {
-      alert(`${message}, code: ${statusCode}`)
+      setInfoMessage({
+        message: error,
+        status: false,
+        isEnable: true
+      })
     }
   }
 
   return (
     <div>
       <Header />
+      {infoMensage.isEnable &&
+        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
+      }
       <form className="content" onSubmit={handleSubmit}>
         <label className="form-label" htmlFor="name_form">
           Nome:

@@ -23,20 +23,21 @@ export default function LevelForm() {
     event.preventDefault();
     const response = await addLevel(formValues);
 
-    const { id, description, message } = response;
+    const { id, description, error } = response;
 
     if (id) {
       setInfoMessage({
         message: `Level "${description} adiconado com sucesso`,
         status: true,
         isEnable: true
-      })
+      });
+      setFormValues({ description: '' });
     } else {
       setInfoMessage({
-        message: message,
+        message: error,
         status: false,
         isEnable: true
-      })
+      });
     }
   };
 

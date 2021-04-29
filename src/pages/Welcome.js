@@ -4,21 +4,22 @@ import Header from '../components/Header';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import * as api from '../services/api';
 
-
 export default function Welcome() {
   const { login, setLogin, setLevelOptions } = useContext(ErrorCenterContext);
   const history = useHistory();
 
   const handleForm = async () => {
     const optionsResponse = await api.getLevels();
-    // const options = reponse.map((e) => e.description);
+    if (optionsResponse.error) return history.push('/login')
+
     setLevelOptions(optionsResponse);
     history.push('/form');
   }
 
   const handleEventList = async () => {
     const optionsResponse = await api.getLevels();
-    // const options = reponse.map((e) => e.description);
+    if (optionsResponse.error) return history.push('/login')
+
     setLevelOptions(optionsResponse);
     history.push('/events');
   }
@@ -44,12 +45,6 @@ export default function Welcome() {
   const logged = (<div className="title">
     Olá, <strong>{login.firstname + ' ' + login.lastname}</strong>, seja bem vindo ao sistema!
   </div>)
-
-  const testApi = async () => {
-    const response = await api.getLevels();
-    console.log('testAPI')
-    console.log(response);
-  }
 
   return (
     <div>
@@ -96,14 +91,6 @@ export default function Welcome() {
           onClick={logout} >
           Sair
         </button>
-
-        <button
-          className="form-button"
-          type="button"
-          onClick={testApi} >
-          API Teste Requests
-        </button>
-
       </div>
     </div>
   );

@@ -1,10 +1,12 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import FilterEvent from '../components/FilterEvent';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import { getEvents } from '../services/api';
+import { useHistory } from 'react-router';
 
 export default function EventsList() {
+  const [filterVisible, setFilterVisible] = useState(false);
 
   const { apiData, setApiData, filterOptions } = useContext(ErrorCenterContext);
 
@@ -16,12 +18,27 @@ export default function EventsList() {
     fetchEvents();
   }, [filterOptions, setApiData]);
 
+  const history = useHistory();
+  const filterButtonText = filterVisible
+    ? 'Ocultar filtro'
+    : 'Mostrar opções de filtro';
+
   console.log('API DATA', apiData)
 
   return (
     <div>
       <Header />
-      <FilterEvent />
+      <div className="content-row">
+        <button
+          className='top-button'
+          onClick={() => setFilterVisible(!filterVisible)}
+        >{filterButtonText}
+        </button>
+
+        <button className='top-button' onClick={() => history.goBack()}>Voltar</button>
+
+      </div>
+      {filterVisible && <FilterEvent />}
       <div className="content">
         <table>
           <thead>

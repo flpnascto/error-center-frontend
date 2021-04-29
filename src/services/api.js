@@ -2,6 +2,8 @@ import { getStorage } from './localSorage'
 
 const URL = process.env.REACT_APP_ENDPOINT;
 
+const tokenKeyStorage = 'token';
+
 const ENDPOINT = {
   levels: '/level',
   login: '/login',
@@ -13,8 +15,7 @@ const ENDPOINT = {
 }
 
 async function getLevels() {
-  const token = getStorage('token');
-  console.log('token api', token)
+  const token = getStorage(tokenKeyStorage);
   const requestOptions = {
     headers: {
       Authorization: token.token_type + ' ' + token.access_token,
@@ -22,12 +23,12 @@ async function getLevels() {
   }
   const request = await fetch(URL + ENDPOINT.levels, requestOptions)
   const response = await request.json();
+  console.log('API: Level|getAll', response);
   return response;
 }
 
 async function addLevel(levelData) {
-  const token = getStorage('token');
-  console.log('token api', token)
+  const token = getStorage(tokenKeyStorage);
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -38,12 +39,13 @@ async function addLevel(levelData) {
   }
   const request = await fetch(URL + ENDPOINT.levels, requestOptions)
   const response = await request.json();
+  console.log('API: Level|getAll', response);
+
   return response;
 }
 
 async function getEvents(filterOptions) {
-  const token = getStorage('token');
-  console.log('token api', token)
+  const token = getStorage(tokenKeyStorage);
   const requestOptions = {
     headers: {
       Authorization: token.token_type + ' ' + token.access_token,
@@ -52,10 +54,9 @@ async function getEvents(filterOptions) {
   const { description, origin, date, quantity, user, level } = filterOptions;
   const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
     `&user=${user}&level=${level}`;
-  console.log('endpoit', URL + ENDPOINT.events + query)
   const request = await fetch(URL + ENDPOINT.events + query, requestOptions)
   const response = await request.json();
-  console.log('getEvents', response)
+  console.log('API: Events|getAll', response);
   if (response.message) return []
   return response;
 }
@@ -72,7 +73,7 @@ async function addUser(userData) {
 }
 
 async function addEvent(eventData) {
-  const token = getStorage('token');
+  const token = getStorage(tokenKeyStorage);
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -81,9 +82,10 @@ async function addEvent(eventData) {
     },
     body: JSON.stringify(eventData)
   }
-  console.log(requestOptions)
   const request = await fetch(URL + ENDPOINT.newEvent, requestOptions);
   const response = await request.json();
+  console.log('API: Events|register', response);
+
   return response;
 }
 
@@ -106,16 +108,17 @@ async function getToken({ email, password }) {
 }
 
 async function login() {
-  const token = getStorage('token');
+  const token = getStorage(tokenKeyStorage);
+  console.log('API: Token|request', token);
   const requestOptions = {
     headers: {
       Authorization: token.token_type + ' ' + token.access_token,
     }
   }
   const request = await fetch(URL + ENDPOINT.login, requestOptions)
-  const reponse = await request.json();
-  console.log('api Login', reponse)
-  return reponse;
+  const response = await request.json();
+  console.log('API: Login|request', response);
+  return response;
 }
 
 export {
