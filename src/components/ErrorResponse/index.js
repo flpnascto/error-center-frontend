@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 
 import './style.css';
 
@@ -9,6 +9,8 @@ export default function ErrorResponse({ message, status }) {
 
   return (
     <div className='error__container'>
+      {(message === 'invalid_token') && <Redirect to='/login' />}
+
       {status &&
         (<div className='error__positive'>{message}</div>)
       }

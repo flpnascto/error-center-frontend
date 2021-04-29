@@ -23,7 +23,7 @@ export default function LevelForm() {
     event.preventDefault();
     const response = await addLevel(formValues);
 
-    const { id, description, message } = response;
+    const { id, description, error } = response;
 
     if (id) {
       setInfoMessage({
@@ -34,7 +34,7 @@ export default function LevelForm() {
       setFormValues({ description: '' });
     } else {
       setInfoMessage({
-        message: message,
+        message: error,
         status: false,
         isEnable: true
       });

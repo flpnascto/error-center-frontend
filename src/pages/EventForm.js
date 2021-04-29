@@ -44,7 +44,7 @@ export default function EventForm() {
 
     const response = await addEvent(eventData);
 
-    const { id, message } = response;
+    const { id, error } = response;
 
     if (id) {
       setInfoMessage({
@@ -55,7 +55,7 @@ export default function EventForm() {
       setFormValues(formValuesInitialState)
     } else {
       setInfoMessage({
-        message: message,
+        message: error,
         status: false,
         isEnable: true
       })

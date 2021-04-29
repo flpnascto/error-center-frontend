@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router'
 import Header from '../components/Header';
 import ErrorResponse from '../components/ErrorResponse';
 import { addUser } from '../services/api';
@@ -20,8 +19,6 @@ export default function EventForm() {
 
   const [formValues, setFormValues] = useState(formValuesInitialState)
 
-  const history = useHistory();
-
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
     setInfoMessage({ isEnable: false })
@@ -31,7 +28,7 @@ export default function EventForm() {
     event.preventDefault();
     const response = await addUser(formValues);
     console.log(response)
-    const { email, message, statusCode } = response;
+    const { email, error } = response;
     if (email) {
       setInfoMessage({
         message: 'Usuário cadastrado com sucesso',
@@ -41,7 +38,7 @@ export default function EventForm() {
       setFormValues(formValuesInitialState);
     } else {
       setInfoMessage({
-        message: message,
+        message: error,
         status: false,
         isEnable: true
       })
