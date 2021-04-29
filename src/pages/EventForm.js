@@ -13,7 +13,7 @@ export default function EventForm() {
     isEnable: false,
   });
 
-  const [formValues, setFormValues] = useState({
+  const formValuesInitialState = {
     description: '',
     log: '',
     origin: '',
@@ -22,7 +22,9 @@ export default function EventForm() {
     user: login.email,
     levels: levelOptions,
     selectedLevel: levelOptions[0].id,
-  });
+  }
+
+  const [formValues, setFormValues] = useState(formValuesInitialState);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
@@ -49,7 +51,8 @@ export default function EventForm() {
         message: 'Evento cadastrado com sucesso',
         status: true,
         isEnable: true
-      })
+      });
+      setFormValues(formValuesInitialState)
     } else {
       setInfoMessage({
         message: message,
