@@ -8,6 +8,7 @@ function Provider({ children }) {
     firstname: '',
     lastname: '',
     email: '',
+    isAdmin: false,
     isLogged: false,
   });
 

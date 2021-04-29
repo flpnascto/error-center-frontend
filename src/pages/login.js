@@ -64,11 +64,12 @@ export default function Login() {
     const successToken = await handleToken();
 
     if (successToken) {
-      const { firstname, lastname, email } = await api.login();
+      const { firstname, lastname, email, authority } = await api.login();
       setLogin({
         firstname,
         lastname,
         email,
+        isAdmin: (authority === 'ADMIN'),
         isLogged: true
       })
       history.push('/')
