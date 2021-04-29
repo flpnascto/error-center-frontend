@@ -11,12 +11,14 @@ export default function EventForm() {
     isEnable: false,
   });
 
-  const [formValues, setFormValues] = useState({
+  const formValuesInitialState = {
     firstname: '',
     lastname: '',
     email: '',
     password: '',
-  })
+  }
+
+  const [formValues, setFormValues] = useState(formValuesInitialState)
 
   const history = useHistory();
 
@@ -35,7 +37,8 @@ export default function EventForm() {
         message: 'Usuário cadastrado com sucesso',
         status: true,
         isEnable: true
-      })
+      });
+      setFormValues(formValuesInitialState);
     } else {
       setInfoMessage({
         message: message,
