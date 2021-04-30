@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import Header from '../components/Header';
+import UserPanel from '../components/UserPanel';
+import AdminPanel from '../components/AdminPanel';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import * as api from '../services/api';
 
@@ -26,13 +28,12 @@ export default function Welcome() {
 
   const handleNewUser = () => history.push('/user');
 
-  const handleNewLevel = () => history.push('/level');
-
   const logout = () => {
     setLogin({
       firstname: '',
       lastname: '',
       email: '',
+      isAdmin: false,
       isLogged: false,
     });
     localStorage.clear();
@@ -57,17 +58,13 @@ export default function Welcome() {
           className="form-button"
           type="button"
           disabled={!login.isLogged}
-          onClick={handleForm} >
-          Cadastrar Evento
-        </button>
-
-        <button
-          className="form-button"
-          type="button"
-          disabled={!login.isLogged}
           onClick={handleEventList} >
           Listar Eventos
         </button>
+
+        {!login.isAdmin && <UserPanel actionButton={handleForm} />}
+        {login.isAdmin && <AdminPanel />}
+
 
         <button
           className="form-button"
@@ -76,21 +73,21 @@ export default function Welcome() {
           Cadastrar Usuário
         </button>
 
-        <button
-          className="form-button"
-          type="button"
-          disabled={!login.isLogged}
-          onClick={handleNewLevel} >
-          Cadastrar Level
-        </button>
+        {login.isLogged
+          ? (<button
+            className="form-button"
+            type="button"
+            onClick={logout} >
+            Sair
+          </button>)
 
-        <button
-          className="form-button"
-          type="button"
-          disabled={!login.isLogged}
-          onClick={logout} >
-          Sair
-        </button>
+          : (<button
+            className="form-button"
+            type="button"
+            onClick={() => history.push('/login')} >
+            Entrar
+          </button>)
+        }
       </div>
     </div>
   );
