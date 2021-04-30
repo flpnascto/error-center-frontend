@@ -9,8 +9,7 @@ const ENDPOINT = {
   login: '/login',
   newEvent: '/event',
   events: '/event',
-  newUser: '/user',
-  users: '/user',
+  user: '/user',
   token: '/oauth/token'
 }
 
@@ -61,13 +60,27 @@ async function getEvents(filterOptions) {
   return response;
 }
 
+async function getUser() {
+  const token = getStorage(tokenKeyStorage);
+  const requestOptions = {
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
+  }
+  const request = await fetch(URL + ENDPOINT.user
+    , requestOptions)
+  const response = await request.json();
+  console.log('API: User|getAll', response);
+  return response;
+}
+
 async function addUser(userData) {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(userData),
   }
-  const request = await fetch(URL + ENDPOINT.newUser, requestOptions);
+  const request = await fetch(URL + ENDPOINT.user, requestOptions);
   const response = request.json();
   return response;
 }
@@ -125,6 +138,7 @@ export {
   getLevels,
   addLevel,
   getEvents,
+  getUser,
   addUser,
   addEvent,
   getToken,

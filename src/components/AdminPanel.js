@@ -7,8 +7,6 @@ export default function AdminPanel() {
 
   const history = useHistory();
 
-  const handleNewLevel = () => history.push('/level');
-
   // ALTERAR APÓS CRIAR ROTAS ESPECÍFICAS
   const handleClick = () => history.push('/')
 
@@ -18,14 +16,14 @@ export default function AdminPanel() {
         className="form-button"
         type="button"
         disabled={!login.isLogged}
-        onClick={handleClick} >
-        Editar usuários
+        onClick={() => history.push('/user/all')} >
+        Listar usuários
       </button>
       <button
         className="form-button"
         type="button"
         disabled={!login.isLogged}
-        onClick={handleNewLevel} >
+        onClick={() => history.push('/level')} >
         Cadastar Level
       </button>
       <button
