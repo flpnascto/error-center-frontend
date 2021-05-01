@@ -6,7 +6,8 @@ import Login from './pages/login';
 import EventsList from './pages/EventsList';
 import UserForm from './pages/UserForm';
 import LevelForm from './pages/LevelForm';
-import UserList from './pages/UserList'
+import UserList from './pages/UserList';
+import EditLevel from './pages/EditLevel';
 
 const Router = () => (
   <Switch>
@@ -15,6 +16,7 @@ const Router = () => (
     <Route path='/events' component={EventsList} />
     <Route path='/user/all' component={UserList} />
     <Route path='/user' component={UserForm} />
+    <Route path='/level/edit' component={EditLevel} />
     <Route path='/level' component={LevelForm} />
     <Route exact path="/" component={Welcome} />
   </Switch>

@@ -43,6 +43,25 @@ async function addLevel(levelData) {
   return response;
 }
 
+async function updateLevel({ id, description }) {
+  const token = getStorage(tokenKeyStorage);
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ description }),
+  }
+  console.log('requestOptions', requestOptions)
+  console.log(URL + ENDPOINT.levels + `/${parseInt(id, 10)}`)
+  const request = await fetch(URL + ENDPOINT.levels + `/${parseInt(id, 10)}`, requestOptions)
+  const response = await request.json();
+  console.log('API: Level|updateById', response);
+
+  return response;
+}
+
 async function getEvents(filterOptions) {
   const token = getStorage(tokenKeyStorage);
   const requestOptions = {
@@ -137,6 +156,7 @@ async function login() {
 export {
   getLevels,
   addLevel,
+  updateLevel,
   getEvents,
   getUser,
   addUser,
