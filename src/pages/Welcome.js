@@ -10,19 +10,19 @@ export default function Welcome() {
   const { login, setLogin, setLevelOptions } = useContext(ErrorCenterContext);
   const history = useHistory();
 
-  const handleForm = async () => {
+  const handleLevels = async () => {
     const optionsResponse = await api.getLevels();
     if (optionsResponse.error) return history.push('/login')
-
     setLevelOptions(optionsResponse);
+  }
+
+  const handleForm = async () => {
+    await handleLevels();
     history.push('/form');
   }
 
   const handleEventList = async () => {
-    const optionsResponse = await api.getLevels();
-    if (optionsResponse.error) return history.push('/login')
-
-    setLevelOptions(optionsResponse);
+    await handleLevels();
     if (login.isAdmin) return history.push('/events/admin')
     history.push('/events');
   }
