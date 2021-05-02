@@ -1,0 +1,25 @@
+.modal__container {
+  align-items: center;
+  background-color: white;
+  border: 1px solid #00AFFA;
+  border-radius: 10px;
+  box-shadow: 0 0 0.2em #00AFFA;
+  display: flex;
+  flex-direction: row;
+  left: 50vw;
+  padding: 50px;
+  position: fixed;
+  top: 50vh;
+  transform: translate(-50%,-50%);
+}
+
+.modal__positive {
+  color: #4ab858;
+}
+
+.modal__negative {
+  color: lightcoral;
+}
+.modal__button {
+  margin-left: 20px;
+}

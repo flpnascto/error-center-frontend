@@ -1,16 +1,20 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import ErrorCenterContext from '../context/ErrorCenterContext';
+import { getLevels } from '../services/api'
 
 export default function AdminPanel() {
-  const { login } = useContext(ErrorCenterContext);
+  const { login, setLevelOptions } = useContext(ErrorCenterContext);
 
   const history = useHistory();
 
-  const handleNewLevel = () => history.push('/level');
+  const handleEventList = async () => {
+    const optionsResponse = await getLevels();
+    if (optionsResponse.error) return history.push('/login')
 
-  // ALTERAR APÓS CRIAR ROTAS ESPECÍFICAS
-  const handleClick = () => history.push('/')
+    setLevelOptions(optionsResponse);
+    history.push('/level/edit');
+  }
 
   return (
     <div className="content">
@@ -18,21 +22,21 @@ export default function AdminPanel() {
         className="form-button"
         type="button"
         disabled={!login.isLogged}
-        onClick={handleClick} >
-        Editar usuários
+        onClick={() => history.push('/user/all')} >
+        Listar usuários
       </button>
       <button
         className="form-button"
         type="button"
         disabled={!login.isLogged}
-        onClick={handleNewLevel} >
+        onClick={() => history.push('/level')} >
         Cadastar Level
       </button>
       <button
         className="form-button"
         type="button"
         disabled={!login.isLogged}
-        onClick={handleClick} >
+        onClick={handleEventList} >
         Editar Level
       </button>
     </div>
