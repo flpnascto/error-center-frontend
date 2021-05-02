@@ -3,6 +3,7 @@ import ErrorCenterContext from '../context/ErrorCenterContext';
 import Header from '../components/Header';
 import ErrorResponse from '../components/ErrorResponse';
 import { addEvent } from '../services/api';
+import LoadingBox from '../components/LoadingBox';
 
 export default function EventForm() {
   const { login, levelOptions } = useContext(ErrorCenterContext);
@@ -22,9 +23,11 @@ export default function EventForm() {
     user: login.email,
     levels: levelOptions,
     selectedLevel: levelOptions[0].id,
-  }
+  };
 
   const [formValues, setFormValues] = useState(formValuesInitialState);
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
@@ -41,9 +44,9 @@ export default function EventForm() {
       origin: formValues.origin,
       quantity: formValues.quantity,
     };
-
+    setLoading(true);
     const response = await addEvent(eventData);
-
+    setLoading(false)
     const { id, error } = response;
 
     if (id) {
@@ -134,7 +137,12 @@ export default function EventForm() {
           />
         </label>
 
-        <input className="form-button" type="submit" value="Adicionar evento" />
+        {loading
+          ? <LoadingBox />
+          : (
+            <input className="form-button" type="submit" value="Adicionar evento" />
+          )
+        }
       </form>
     </div>
   );

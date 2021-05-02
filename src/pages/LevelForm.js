@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import ErrorResponse from '../components/ErrorResponse';
 import { addLevel } from '../services/api';
+import LoadingBox from '../components/LoadingBox';
 
 export default function LevelForm() {
   const [infoMensage, setInfoMessage] = useState({
@@ -14,6 +15,8 @@ export default function LevelForm() {
     description: '',
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
     setInfoMessage({ isEnable: false });
@@ -21,7 +24,9 @@ export default function LevelForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const response = await addLevel(formValues);
+    setLoading(false);
 
     const { id, description, error } = response;
 
@@ -59,8 +64,12 @@ export default function LevelForm() {
           />
         </label>
 
-        <input className="form-button" type="submit" value="Adicionar level" />
-
+        {loading
+          ? <LoadingBox />
+          : (
+            <input className="form-button" type="submit" value="Adicionar level" />
+          )
+        }
       </form>
     </div>
   );

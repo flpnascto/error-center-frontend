@@ -2,17 +2,17 @@ import React, { useContext, useState } from 'react';
 import Header from '../components/Header';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import ErrorResponse from '../components/ErrorResponse';
-import { updateLevel, getLevels } from '../services/api';
-import { useHistory } from 'react-router';
+import { updateLevel } from '../services/api';
+import LoadingBox from '../components/LoadingBox';
 
 export default function EditLevel() {
-  const { levelOptions, setLevelOptions } = useContext(ErrorCenterContext);
+  const { levelOptions } = useContext(ErrorCenterContext);
 
   const formValuesInitialState = {
     levels: levelOptions,
     id: levelOptions[0].id,
     description: '',
-  }
+  };
 
   const [formValues, setFormValues] = useState(formValuesInitialState);
 
@@ -22,7 +22,7 @@ export default function EditLevel() {
     isEnable: false,
   });
 
-  const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
@@ -31,7 +31,9 @@ export default function EditLevel() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const response = await updateLevel(formValues);
+    setLoading(false);
 
     const { id, description, error } = response;
 
@@ -81,9 +83,13 @@ export default function EditLevel() {
           />
         </label>
 
-        <input className="form-button" type="submit" value="Editar level" />
+        {loading
+          ? <LoadingBox />
+          : (
+            <input className="form-button" type="submit" value="Editar level" />
+          )
+        }
       </form>
-
     </div>
   );
 }

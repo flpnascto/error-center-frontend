@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import ErrorResponse from '../components/ErrorResponse';
 import { addUser } from '../services/api';
+import LoadingBox from '../components/LoadingBox';
 
 export default function EventForm() {
   const [infoMensage, setInfoMessage] = useState({
@@ -16,9 +17,11 @@ export default function EventForm() {
     email: '',
     password: '',
     password_confirm: '',
-  }
+  };
 
-  const [formValues, setFormValues] = useState(formValuesInitialState)
+  const [formValues, setFormValues] = useState(formValuesInitialState);
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
@@ -35,7 +38,9 @@ export default function EventForm() {
         isEnable: true
       });
     } else {
+      setLoading(true);
       const response = await addUser(formValues);
+      setLoading(false);
       const { email, error } = response;
       if (email) {
         setInfoMessage({
@@ -116,7 +121,12 @@ export default function EventForm() {
           />
         </label>
 
-        <input className="form-button" type="submit" value="Adicionar usuário" />
+        {loading
+          ? <LoadingBox />
+          : (
+            <input className="form-button" type="submit" value="Adicionar usuário" />
+          )
+        }
       </form>
     </div>
   );
