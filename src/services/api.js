@@ -7,8 +7,7 @@ const tokenKeyStorage = 'token';
 const ENDPOINT = {
   levels: '/level',
   login: '/login',
-  newEvent: '/event',
-  events: '/event',
+  event: '/event',
   user: '/user',
   token: '/oauth/token'
 }
@@ -72,11 +71,43 @@ async function getEvents(filterOptions) {
   const { description, origin, date, quantity, user, level } = filterOptions;
   const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
     `&user=${user}&level=${level}`;
-  const request = await fetch(URL + ENDPOINT.events + query, requestOptions)
+  const request = await fetch(URL + ENDPOINT.event + query, requestOptions)
   const response = await request.json();
   console.log('API: Events|getAll', response);
   if (response.message) return []
   return response;
+}
+
+async function addEvent(eventData) {
+  const token = getStorage(tokenKeyStorage);
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(eventData)
+  }
+  const request = await fetch(URL + ENDPOINT.event, requestOptions);
+  const response = await request.json();
+  console.log('API: Events|register', response);
+
+  return response;
+}
+
+async function removeEvent(id) {
+  console.log('api',)
+  const token = getStorage(tokenKeyStorage);
+  const requestOptions = {
+    method: 'DELETE',
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    },
+  }
+  const request = await fetch(URL + ENDPOINT.event + '/' + id, requestOptions);
+  const response = await request.json();
+  console.log('API: Events|deleteById', response);
+  return response
 }
 
 async function getUser() {
@@ -101,23 +132,6 @@ async function addUser(userData) {
   }
   const request = await fetch(URL + ENDPOINT.user, requestOptions);
   const response = request.json();
-  return response;
-}
-
-async function addEvent(eventData) {
-  const token = getStorage(tokenKeyStorage);
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      Authorization: token.token_type + ' ' + token.access_token,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(eventData)
-  }
-  const request = await fetch(URL + ENDPOINT.newEvent, requestOptions);
-  const response = await request.json();
-  console.log('API: Events|register', response);
-
   return response;
 }
 
@@ -158,9 +172,10 @@ export {
   addLevel,
   updateLevel,
   getEvents,
+  addEvent,
+  removeEvent,
   getUser,
   addUser,
-  addEvent,
   getToken,
   login
 }

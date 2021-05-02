@@ -23,6 +23,7 @@ export default function Welcome() {
     if (optionsResponse.error) return history.push('/login')
 
     setLevelOptions(optionsResponse);
+    if (login.isAdmin) return history.push('/events/admin')
     history.push('/events');
   }
 

@@ -97,3 +97,22 @@ td {
 .row-text-center {
   text-align: center;
 }
+
+.button-remove {
+  background-color: lightcoral;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.modal {
+  background: transparent;
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 1;
+}
