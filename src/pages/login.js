@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import ErrorResponse from '../components/ErrorResponse';
 import * as api from '../services/api';
 import { setStorage } from '../services/localSorage';
-
+import LoadingBox from '../components/LoadingBox';
 import './style.css';
 
 export default function Login() {
@@ -20,8 +20,11 @@ export default function Login() {
   const [formValues, setFormValues] = useState({
     email: '',
     password: '',
-  })
+  });
+
   const [btActive, setBtActive] = useState(true);
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const { email, password } = formValues;
@@ -61,6 +64,7 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     const successToken = await handleToken();
 
     if (successToken) {
@@ -71,7 +75,10 @@ export default function Login() {
         email,
         isAdmin: (authority === 'ADMIN'),
         isLogged: true
-      })
+      });
+
+      setLoading(false);
+
       history.push('/')
     } else {
       setLogin({ ...login, isLogged: false });
@@ -87,7 +94,7 @@ export default function Login() {
       <div className="content">
         <label className="form-label" htmlFor="email">
           Email:
-        <br />
+
           <input
             className="form-input-text"
             type="email"
@@ -95,10 +102,10 @@ export default function Login() {
             onChange={(event) => handleChange(event, 'email')}
           />
         </label>
-        <br />
+
         <label className="form-label" htmlFor="password">
           Password:
-        <br />
+
           <input
             className="form-input-text"
             type="password"
@@ -106,15 +113,20 @@ export default function Login() {
             onChange={(event) => handleChange(event, 'password')}
           />
         </label>
-        <br />
-        <button
-          className="form-button"
-          type="button"
-          disabled={!btActive}
-          onClick={handleLogin}
-        >
-          Entrar
-      </button>
+
+        {loading
+          ? <LoadingBox />
+          : (
+            <button
+              className="form-button"
+              type="button"
+              disabled={!btActive}
+              onClick={handleLogin}
+            >
+              Entrar
+            </button>
+          )
+        }
       </div>
     </div>
   );
