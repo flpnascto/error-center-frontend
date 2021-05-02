@@ -15,6 +15,7 @@ export default function EventForm() {
     lastname: '',
     email: '',
     password: '',
+    password_confirm: '',
   }
 
   const [formValues, setFormValues] = useState(formValuesInitialState)
@@ -26,22 +27,30 @@ export default function EventForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await addUser(formValues);
-    console.log(response)
-    const { email, error } = response;
-    if (email) {
+
+    if (formValues.password !== formValues.password_confirm) {
       setInfoMessage({
-        message: 'Usuário cadastrado com sucesso',
-        status: true,
-        isEnable: true
-      });
-      setFormValues(formValuesInitialState);
-    } else {
-      setInfoMessage({
-        message: error,
+        message: 'Passwords precisam ser iguais',
         status: false,
         isEnable: true
-      })
+      });
+    } else {
+      const response = await addUser(formValues);
+      const { email, error } = response;
+      if (email) {
+        setInfoMessage({
+          message: 'Usuário cadastrado com sucesso',
+          status: true,
+          isEnable: true
+        });
+        setFormValues(formValuesInitialState);
+      } else {
+        setInfoMessage({
+          message: error,
+          status: false,
+          isEnable: true
+        })
+      }
     }
   }
 
@@ -90,9 +99,20 @@ export default function EventForm() {
             <input
             className="form-input-text"
             id="password_form"
-            type="text"
+            type="password"
             value={formValues.password}
             onChange={(event) => handleChange(event, 'password')}
+          />
+        </label>
+
+        <label className="form-label" htmlFor="password_form">
+          Confirmar Password:
+            <input
+            className="form-input-text"
+            id="password_form"
+            type="password"
+            value={formValues.password_confirm}
+            onChange={(event) => handleChange(event, 'password_confirm')}
           />
         </label>
 

@@ -37,7 +37,7 @@ async function addLevel(levelData) {
   }
   const request = await fetch(URL + ENDPOINT.levels, requestOptions)
   const response = await request.json();
-  console.log('API: Level|getAll', response);
+  console.log('API: Level|register', response);
 
   return response;
 }
@@ -131,7 +131,8 @@ async function addUser(userData) {
     body: JSON.stringify(userData),
   }
   const request = await fetch(URL + ENDPOINT.user, requestOptions);
-  const response = request.json();
+  const response = await request.json();
+  console.log('API: User|register', response);
   return response;
 }
 
