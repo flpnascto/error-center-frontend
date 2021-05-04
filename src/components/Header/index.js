@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ErrorCenterContext from '../../context/ErrorCenterContext';
 
 import './style.css'
@@ -11,13 +11,13 @@ export default function Header() {
   return (
     <div>
       <header className="content-header">
-        <a href="/">
+        <Link to="/" >
           <img
             src="https://contaazul.com/wp-content/themes/assets/general/divorce/layout/images/logo.svg"
             alt="Conta Azul"
             width="200px">
           </img>
-        </a>
+        </Link>
 
         <div className="title-header" >Aceleração - Grupo 3</div>
 
