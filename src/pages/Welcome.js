@@ -74,12 +74,13 @@ export default function Welcome() {
         {login.isAdmin && <AdminPanel />}
 
 
-        <button
-          className="form-button"
-          type="button"
-          onClick={handleNewUser} >
-          Cadastrar Usuário
-        </button>
+        {!login.isLogged &&
+          (<button
+            className="form-button"
+            type="button"
+            onClick={handleNewUser} >
+            Cadastrar Usuário
+          </button>)}
 
         {login.isLogged
           ? (<button
