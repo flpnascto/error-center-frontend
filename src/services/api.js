@@ -52,8 +52,6 @@ async function updateLevel({ id, description }) {
     },
     body: JSON.stringify({ description }),
   }
-  console.log('requestOptions', requestOptions)
-  console.log(URL + ENDPOINT.levels + `/${parseInt(id, 10)}`)
   const request = await fetch(URL + ENDPOINT.levels + `/${parseInt(id, 10)}`, requestOptions)
   const response = await request.json();
   console.log('API: Level|updateById', response);
@@ -96,7 +94,6 @@ async function addEvent(eventData) {
 }
 
 async function removeEvent(id) {
-  console.log('api',)
   const token = getStorage(tokenKeyStorage);
   const requestOptions = {
     method: 'DELETE',

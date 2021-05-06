@@ -77,12 +77,11 @@ export default function Login() {
         isLogged: true
       });
 
-      setLoading(false);
-
       history.push('/')
     } else {
       setLogin({ ...login, isLogged: false });
     }
+    setLoading(false);
   };
 
   return (
