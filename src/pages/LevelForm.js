@@ -8,7 +8,6 @@ export default function LevelForm() {
   const [infoMensage, setInfoMessage] = useState({
     message: '',
     status: false,
-    isEnable: false,
   });
 
   const [formValues, setFormValues] = useState({
@@ -19,7 +18,7 @@ export default function LevelForm() {
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
-    setInfoMessage({ isEnable: false });
+    setInfoMessage({ ...infoMensage, message: false });
   };
 
   const handleSubmit = async (event) => {
@@ -34,14 +33,12 @@ export default function LevelForm() {
       setInfoMessage({
         message: `Level "${description} adiconado com sucesso`,
         status: true,
-        isEnable: true
       });
       setFormValues({ description: '' });
     } else {
       setInfoMessage({
         message: error,
         status: false,
-        isEnable: true
       });
     }
   };
@@ -49,9 +46,7 @@ export default function LevelForm() {
   return (
     <div>
       <Header />
-      {infoMensage.isEnable &&
-        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
-      }
+      <ErrorResponse message={infoMensage.message} status={infoMensage.status} />
       <form className="content" onSubmit={handleSubmit}>
         <label className="form-label" htmlFor="namedescription_form">
           Descrição:

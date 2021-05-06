@@ -8,7 +8,6 @@ export default function EventForm() {
   const [infoMensage, setInfoMessage] = useState({
     message: '',
     status: false,
-    isEnable: false,
   });
 
   const formValuesInitialState = {
@@ -25,7 +24,7 @@ export default function EventForm() {
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
-    setInfoMessage({ isEnable: false })
+    setInfoMessage({ ...infoMensage, message: '' });
   };
 
   const handleSubmit = async (event) => {
@@ -35,7 +34,6 @@ export default function EventForm() {
       setInfoMessage({
         message: 'Passwords precisam ser iguais',
         status: false,
-        isEnable: true
       });
     } else {
       setLoading(true);
@@ -46,7 +44,6 @@ export default function EventForm() {
         setInfoMessage({
           message: 'Usuário cadastrado com sucesso',
           status: true,
-          isEnable: true
         });
         setFormValues(formValuesInitialState);
       } else {
@@ -62,9 +59,7 @@ export default function EventForm() {
   return (
     <div>
       <Header />
-      {infoMensage.isEnable &&
-        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
-      }
+      <ErrorResponse message={infoMensage.message} status={infoMensage.status} />
       <form className="content" onSubmit={handleSubmit}>
         <label className="form-label" htmlFor="name_form">
           Nome:

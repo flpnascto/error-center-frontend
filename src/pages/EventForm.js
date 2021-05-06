@@ -11,7 +11,6 @@ export default function EventForm() {
   const [infoMensage, setInfoMessage] = useState({
     message: '',
     status: false,
-    isEnable: false,
   });
 
   const formValuesInitialState = {
@@ -19,7 +18,7 @@ export default function EventForm() {
     log: '',
     origin: '',
     date: '',
-    quantity: 0,
+    quantity: 1,
     user: login.email,
     levels: levelOptions,
     selectedLevel: levelOptions[0].id,
@@ -31,7 +30,7 @@ export default function EventForm() {
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
-    setInfoMessage({ isEnable: false })
+    setInfoMessage({ ...infoMensage, message: false });
   };
 
   const handleSubmit = async (event) => {
@@ -53,14 +52,12 @@ export default function EventForm() {
       setInfoMessage({
         message: 'Evento cadastrado com sucesso',
         status: true,
-        isEnable: true
       });
       setFormValues(formValuesInitialState)
     } else {
       setInfoMessage({
         message: error,
         status: false,
-        isEnable: true
       })
     }
   };
@@ -68,9 +65,7 @@ export default function EventForm() {
   return (
     <div>
       <Header />
-      {infoMensage.isEnable &&
-        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
-      }
+      <ErrorResponse message={infoMensage.message} status={infoMensage.status} />
       <form className="content" onSubmit={handleSubmit}>
         <select
           className="form-input-text"
@@ -132,6 +127,7 @@ export default function EventForm() {
             className="form-input-text"
             id="quantity_form"
             type="number"
+            min="1"
             value={formValues.quantity}
             onChange={(event) => handleChange(event, 'quantity')}
           />

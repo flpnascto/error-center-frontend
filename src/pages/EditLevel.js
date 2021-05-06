@@ -19,14 +19,13 @@ export default function EditLevel() {
   const [infoMensage, setInfoMessage] = useState({
     message: '',
     status: false,
-    isEnable: false,
   });
 
   const [loading, setLoading] = useState(false);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
-    setInfoMessage({ isEnable: false })
+    setInfoMessage({ ...infoMensage, message: false });
   };
 
   const handleSubmit = async (event) => {
@@ -39,9 +38,8 @@ export default function EditLevel() {
 
     if (id) {
       setInfoMessage({
-        message: 'Level alterado com sucesso',
+        message: 'Level alterado com sucesso.',
         status: true,
-        isEnable: true
       });
       const index = (formValuesInitialState.levels).findIndex((e) => e.id === id);
       formValuesInitialState.levels[index] = { ...formValuesInitialState.levels[index], description: description }
@@ -50,7 +48,6 @@ export default function EditLevel() {
       setInfoMessage({
         message: error,
         status: false,
-        isEnable: true
       })
     }
   };
@@ -58,9 +55,7 @@ export default function EditLevel() {
   return (
     <div>
       <Header />
-      {infoMensage.isEnable &&
-        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
-      }
+      <ErrorResponse message={infoMensage.message} status={infoMensage.status} />
       <form className="content" onSubmit={handleSubmit}>
         <select
           className="form-input-text"
