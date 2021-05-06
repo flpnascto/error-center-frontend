@@ -9,7 +9,8 @@ const ENDPOINT = {
   login: '/login',
   event: '/event',
   user: '/user',
-  token: '/oauth/token'
+  token: '/oauth/token',
+  emails: '/user/emails',
 }
 
 async function getLevels() {
@@ -114,10 +115,22 @@ async function getUser() {
       Authorization: token.token_type + ' ' + token.access_token,
     }
   }
-  const request = await fetch(URL + ENDPOINT.user
-    , requestOptions)
+  const request = await fetch(URL + ENDPOINT.user, requestOptions)
   const response = await request.json();
   console.log('API: User|getAll', response);
+  return response;
+}
+
+async function getUserEmails() {
+  const token = getStorage(tokenKeyStorage);
+  const requestOptions = {
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
+  }
+  const request = await fetch(URL + ENDPOINT.emails, requestOptions)
+  const response = await request.json();
+  console.log('API: User|getAllEmail', response);
   return response;
 }
 
@@ -173,6 +186,7 @@ export {
   addEvent,
   removeEvent,
   getUser,
+  getUserEmails,
   addUser,
   getToken,
   login

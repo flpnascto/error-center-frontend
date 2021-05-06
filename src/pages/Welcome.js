@@ -7,13 +7,19 @@ import ErrorCenterContext from '../context/ErrorCenterContext';
 import * as api from '../services/api';
 
 export default function Welcome() {
-  const { login, setLogin, setLevelOptions } = useContext(ErrorCenterContext);
+  const { login, setLogin, setLevelOptions, setUserOptions } = useContext(ErrorCenterContext);
   const history = useHistory();
 
   const handleLevels = async () => {
     const optionsResponse = await api.getLevels();
     if (optionsResponse.error) return history.push('/login')
     setLevelOptions(optionsResponse);
+  }
+
+  const handleUsers = async () => {
+    const optionsResponse = await api.getUserEmails();
+    if (optionsResponse.error) return history.push('/login')
+    setUserOptions(optionsResponse);
   }
 
   const handleForm = async () => {
@@ -23,6 +29,7 @@ export default function Welcome() {
 
   const handleEventList = async () => {
     await handleLevels();
+    await handleUsers();
     if (login.isAdmin) return history.push('/events/admin')
     history.push('/events');
   }

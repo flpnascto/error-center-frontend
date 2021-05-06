@@ -27,6 +27,8 @@ function Provider({ children }) {
     size: 50,
   });
 
+  const [userOptions, setUserOptions] = useState([])
+
   const contextValue = {
     login,
     setLogin,
@@ -36,6 +38,8 @@ function Provider({ children }) {
     setApiData,
     filterOptions,
     setFilterOptions,
+    userOptions,
+    setUserOptions,
   };
 
   return (

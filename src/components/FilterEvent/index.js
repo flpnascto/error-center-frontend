@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import ErrorCenterContext from '../../context/ErrorCenterContext';
 
 export default function FilterEvent() {
-  const { levelOptions, setFilterOptions } = useContext(ErrorCenterContext);
+  const { levelOptions, userOptions, setFilterOptions } = useContext(ErrorCenterContext);
 
   const formValuesInitialState = {
     description: '',
@@ -11,8 +11,9 @@ export default function FilterEvent() {
     quantity: '',
     levels: levelOptions,
     selectedLevel: '',
-    user: '',
-  }
+    user: userOptions,
+    selectedUser: '',
+  };
 
   const [formValues, setFormValues] = useState(formValuesInitialState);
 
@@ -28,7 +29,7 @@ export default function FilterEvent() {
       date: formValues.date,
       quantity: formValues.quantity,
       level: formValues.selectedLevel,
-      user: formValues.user,
+      user: formValues.selectedUser,
       page: 1,
       size: 50,
     })
@@ -106,7 +107,7 @@ export default function FilterEvent() {
           />
         </label>
 
-        <label className="form-label" htmlFor="user_form">
+        {/* <label className="form-label" htmlFor="user_form">
           Usuário:
             <input
             className="form-input-text"
@@ -115,7 +116,18 @@ export default function FilterEvent() {
             value={formValues.user}
             onChange={(event) => handleChange(event, 'user')}
           />
-        </label>
+        </label> */}
+
+        <select
+          className="form-input-text"
+          value={formValues.selectedUser}
+          onChange={(event) => handleChange(event, 'selectedLevel')}
+        >
+          <option key="none" value="">Sem filtro</option>
+          {formValues.user.map((option, index) => (
+            <option key={index} value={option.email}>{option.email}</option>
+          ))}
+        </select>
 
         <div className="content-row">
           <input className="form-button" type="submit" value="Aplicar filtro" />
