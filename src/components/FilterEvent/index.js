@@ -1,21 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ErrorCenterContext from '../../context/ErrorCenterContext';
-import { getLevels } from '../../services/api';
 
 export default function FilterEvent() {
   const { levelOptions, setFilterOptions } = useContext(ErrorCenterContext);
 
-  // useEffect(() => {
-  //   async function fetchLevels() {
-  //     const levels = [{description: }]
-  //     const optionsResponse = await getLevels();
-
-  //     setLevelOptions(optionsResponse);
-  //   }
-  //   fetchLevels();
-  // })
-
-  const [formValues, setFormValues] = useState({
+  const formValuesInitialState = {
     description: '',
     origin: '',
     date: '',
@@ -23,7 +12,9 @@ export default function FilterEvent() {
     levels: levelOptions,
     selectedLevel: '',
     user: '',
-  });
+  }
+
+  const [formValues, setFormValues] = useState(formValuesInitialState);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
@@ -41,6 +32,20 @@ export default function FilterEvent() {
       page: 1,
       size: 50,
     })
+  };
+
+  const handleResetFilter = () => {
+    setFormValues(formValuesInitialState);
+    setFilterOptions({
+      description: '',
+      origin: '',
+      date: '',
+      quantity: '',
+      level: '',
+      user: '',
+      page: 1,
+      size: 50,
+    });
   };
 
   return (
@@ -112,7 +117,17 @@ export default function FilterEvent() {
           />
         </label>
 
-        <input className="form-button" type="submit" value="Aplicar filtro" />
+        <div className="content-row">
+          <input className="form-button" type="submit" value="Aplicar filtro" />
+          <button
+            className="form-button"
+            type="button"
+            onClick={handleResetFilter}
+          >
+            Limpar filtros
+        </button>
+        </div>
+
       </form>
     </div>
   );
