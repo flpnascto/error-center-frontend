@@ -56,75 +56,108 @@ export default function FilterEvent() {
   return (
     <div>
       <form className="content" onSubmit={handleSubmit}>
-        <div>
+        <div className="content-row">
+          <label className="form-label" htmlFor="select_level">
+            Level:
+            <select
+              className="form-input-text"
+              value={formValues.selectedLevel}
+              id="select_level"
+              onChange={(event) => handleChange(event, 'selectedLevel')}
+            >
+              <option key="none" value="">todos</option>
+              {formValues.levels.map((option, index) => (
+                <option key={index} value={option.description}>{option.description}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-label content-middle" htmlFor="date_form">
+            Data:
+            <input
+              className="form-input-text"
+              id="date_form"
+              type="text"
+              placeholder="AAAA-MM-DD"
+              value={formValues.date}
+              onChange={(event) => handleChange(event, 'date')}
+            />
+          </label>
+
+          <label className="form-label content-middle" htmlFor="quantity_form">
+            Quantidade:
+            <input
+              className="form-input-text"
+              id="quantity_form"
+              type="number"
+              value={formValues.quantity}
+              onChange={(event) => handleChange(event, 'quantity')}
+            />
+          </label>
+          <label className="form-label content-middle" htmlFor="select_size">
+            Registros:
+            <select
+              className="form-input-text"
+              value={formValues.selectedSize}
+              id="select_size"
+              onChange={(event) => handleChange(event, 'selectedSize')}
+            >
+              <option key="none" value="">todos</option>
+              {sizeOptions.map((option, index) => (
+                <option key={index} value={option}>{option}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="content-row">
+          <label className="form-label" htmlFor="select_user">
+            Usuário:
+            <select
+              className="form-input-text"
+              value={formValues.selectedUser}
+              id="select_user"
+              onChange={(event) => handleChange(event, 'selectedUser')}
+            >
+              <option key="none" value="">todos</option>
+              {formValues.user.map((option, index) => (
+                <option key={index} value={option.email}>{option.email}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-label content-middle" htmlFor="origin_form">
+            Origem:
+            <input
+              className="form-input-text"
+              id="origin_form"
+              type="text"
+              value={formValues.origin}
+              onChange={(event) => handleChange(event, 'origin')}
+            />
+          </label>
+
+          <label className="form-label content-middle" htmlFor="description_form">
+            Descrição:
+            <input
+              className="form-input-text"
+              id="description_form"
+              type="text"
+              value={formValues.description}
+              onChange={(event) => handleChange(event, 'description')}
+            />
+          </label>
 
         </div>
-        <select
-          className="form-input-text"
-          value={formValues.selectedLevel}
-          onChange={(event) => handleChange(event, 'selectedLevel')}
-        >
-          <option key="none" value="">Sem filtro</option>
-          {formValues.levels.map((option, index) => (
-            <option key={index} value={option.description}>{option.description}</option>
-          ))}
-        </select>
-
-        <select
-          className="form-input-text"
-          value={formValues.selectedSize}
-          onChange={(event) => handleChange(event, 'selectedSize')}
-        >
-          <option key="none" value="">Sem filtro</option>
-          {sizeOptions.map((option, index) => (
-            <option key={index} value={option}>{option}</option>
-          ))}
-        </select>/
 
 
-        <label className="form-label" htmlFor="description_form">
-          Descrição:
-            <input
-            className="form-input-text"
-            id="description_form"
-            type="text"
-            value={formValues.description}
-            onChange={(event) => handleChange(event, 'description')}
-          />
-        </label>
 
-        <label className="form-label" htmlFor="origin_form">
-          Origem:
-            <input
-            className="form-input-text"
-            id="origin_form"
-            type="text"
-            value={formValues.origin}
-            onChange={(event) => handleChange(event, 'origin')}
-          />
-        </label>
 
-        <label className="form-label" htmlFor="date_form">
-          Data:
-            <input
-            className="form-input-text"
-            id="date_form"
-            type="text"
-            value={formValues.date}
-            onChange={(event) => handleChange(event, 'date')}
-          />
-        </label>
 
-        <label className="form-label" htmlFor="quantity_form">
-          Quantidade:
-            <input
-            className="form-input-text"
-            id="quantity_form"
-            type="number"
-            value={formValues.quantity}
-            onChange={(event) => handleChange(event, 'quantity')}
-          />
-        </label>
+
+
+
+
 
         {/* <label className="form-label" htmlFor="user_form">
           Usuário:
@@ -137,16 +170,7 @@ export default function FilterEvent() {
           />
         </label> */}
 
-        <select
-          className="form-input-text"
-          value={formValues.selectedUser}
-          onChange={(event) => handleChange(event, 'selectedLevel')}
-        >
-          <option key="none" value="">Sem filtro</option>
-          {formValues.user.map((option, index) => (
-            <option key={index} value={option.email}>{option.email}</option>
-          ))}
-        </select>
+
 
         <div className="content-row">
           <input className="form-button" type="submit" value="Aplicar filtro" />
