@@ -2,44 +2,44 @@ import React, { useContext, useState } from 'react';
 import Header from '../components/Header';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import ErrorResponse from '../components/ErrorResponse';
-import { updateLevel, getLevels } from '../services/api';
-import { useHistory } from 'react-router';
+import { updateLevel } from '../services/api';
+import LoadingBox from '../components/LoadingBox';
 
 export default function EditLevel() {
-  const { levelOptions, setLevelOptions } = useContext(ErrorCenterContext);
+  const { levelOptions } = useContext(ErrorCenterContext);
 
   const formValuesInitialState = {
     levels: levelOptions,
     id: levelOptions[0].id,
     description: '',
-  }
+  };
 
   const [formValues, setFormValues] = useState(formValuesInitialState);
 
   const [infoMensage, setInfoMessage] = useState({
     message: '',
     status: false,
-    isEnable: false,
   });
 
-  const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
-    setInfoMessage({ isEnable: false })
+    setInfoMessage({ ...infoMensage, message: false });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const response = await updateLevel(formValues);
+    setLoading(false);
 
     const { id, description, error } = response;
 
     if (id) {
       setInfoMessage({
-        message: 'Level alterado com sucesso',
+        message: 'Level alterado com sucesso.',
         status: true,
-        isEnable: true
       });
       const index = (formValuesInitialState.levels).findIndex((e) => e.id === id);
       formValuesInitialState.levels[index] = { ...formValuesInitialState.levels[index], description: description }
@@ -48,7 +48,6 @@ export default function EditLevel() {
       setInfoMessage({
         message: error,
         status: false,
-        isEnable: true
       })
     }
   };
@@ -56,9 +55,7 @@ export default function EditLevel() {
   return (
     <div>
       <Header />
-      {infoMensage.isEnable &&
-        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
-      }
+      <ErrorResponse message={infoMensage.message} status={infoMensage.status} />
       <form className="content" onSubmit={handleSubmit}>
         <select
           className="form-input-text"
@@ -81,9 +78,13 @@ export default function EditLevel() {
           />
         </label>
 
-        <input className="form-button" type="submit" value="Editar level" />
+        {loading
+          ? <LoadingBox />
+          : (
+            <input className="form-button" type="submit" value="Editar level" />
+          )
+        }
       </form>
-
     </div>
   );
 }

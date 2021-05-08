@@ -8,14 +8,14 @@
 }
 
 .error__positive {
-  color: #4ab858;
+  color: #1B9B45;
 }
 
 .error__negative {
-  color: lightcoral;
+  color: #F43E61;
 }
 .error__button {
-  background-color: #4ab858;
+  background-color: #1B9B45;
   border: 1px solid transparent;
   border-radius: 3px;
   color: white;

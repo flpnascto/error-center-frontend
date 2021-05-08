@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import ErrorResponse from '../components/ErrorResponse';
 import { addUser } from '../services/api';
+import LoadingBox from '../components/LoadingBox';
 
 export default function EventForm() {
   const [infoMensage, setInfoMessage] = useState({
     message: '',
     status: false,
-    isEnable: false,
   });
 
   const formValuesInitialState = {
@@ -15,42 +15,51 @@ export default function EventForm() {
     lastname: '',
     email: '',
     password: '',
-  }
+    password_confirm: '',
+  };
 
-  const [formValues, setFormValues] = useState(formValuesInitialState)
+  const [formValues, setFormValues] = useState(formValuesInitialState);
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = ({ target: { value } }, key) => {
     setFormValues({ ...formValues, [key]: value });
-    setInfoMessage({ isEnable: false })
+    setInfoMessage({ ...infoMensage, message: '' });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await addUser(formValues);
-    console.log(response)
-    const { email, error } = response;
-    if (email) {
+
+    if (formValues.password !== formValues.password_confirm) {
       setInfoMessage({
-        message: 'Usuário cadastrado com sucesso',
-        status: true,
-        isEnable: true
-      });
-      setFormValues(formValuesInitialState);
-    } else {
-      setInfoMessage({
-        message: error,
+        message: 'Passwords precisam ser iguais',
         status: false,
-        isEnable: true
-      })
+      });
+    } else {
+      setLoading(true);
+      const response = await addUser(formValues);
+      setLoading(false);
+      const { email, error } = response;
+      if (email) {
+        setInfoMessage({
+          message: 'Usuário cadastrado com sucesso',
+          status: true,
+        });
+        setFormValues(formValuesInitialState);
+      } else {
+        setInfoMessage({
+          message: error,
+          status: false,
+          isEnable: true
+        })
+      }
     }
   }
 
   return (
     <div>
       <Header />
-      {infoMensage.isEnable &&
-        (<ErrorResponse message={infoMensage.message} status={infoMensage.status} />)
-      }
+      <ErrorResponse message={infoMensage.message} status={infoMensage.status} />
       <form className="content" onSubmit={handleSubmit}>
         <label className="form-label" htmlFor="name_form">
           Nome:
@@ -90,13 +99,29 @@ export default function EventForm() {
             <input
             className="form-input-text"
             id="password_form"
-            type="text"
+            type="password"
             value={formValues.password}
             onChange={(event) => handleChange(event, 'password')}
           />
         </label>
 
-        <input className="form-button" type="submit" value="Adicionar usuário" />
+        <label className="form-label" htmlFor="password_form">
+          Confirmar Password:
+            <input
+            className="form-input-text"
+            id="password_form"
+            type="password"
+            value={formValues.password_confirm}
+            onChange={(event) => handleChange(event, 'password_confirm')}
+          />
+        </label>
+
+        {loading
+          ? <LoadingBox />
+          : (
+            <input className="form-button" type="submit" value="Adicionar usuário" />
+          )
+        }
       </form>
     </div>
   );

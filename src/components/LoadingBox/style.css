@@ -1,0 +1,8 @@
+.loading-small {
+  background-color: rgba(39, 135, 233, 0.9);
+  opacity: 0.5;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  height: 38px;
+  margin: 20px 0px;
+}

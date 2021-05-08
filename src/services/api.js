@@ -9,7 +9,8 @@ const ENDPOINT = {
   login: '/login',
   event: '/event',
   user: '/user',
-  token: '/oauth/token'
+  token: '/oauth/token',
+  emails: '/user/emails',
 }
 
 async function getLevels() {
@@ -37,7 +38,7 @@ async function addLevel(levelData) {
   }
   const request = await fetch(URL + ENDPOINT.levels, requestOptions)
   const response = await request.json();
-  console.log('API: Level|getAll', response);
+  console.log('API: Level|register', response);
 
   return response;
 }
@@ -52,8 +53,6 @@ async function updateLevel({ id, description }) {
     },
     body: JSON.stringify({ description }),
   }
-  console.log('requestOptions', requestOptions)
-  console.log(URL + ENDPOINT.levels + `/${parseInt(id, 10)}`)
   const request = await fetch(URL + ENDPOINT.levels + `/${parseInt(id, 10)}`, requestOptions)
   const response = await request.json();
   console.log('API: Level|updateById', response);
@@ -69,8 +68,10 @@ async function getEvents(filterOptions) {
     }
   }
   const { description, origin, date, quantity, user, level } = filterOptions;
+  const { page, size } = filterOptions;
   const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
-    `&user=${user}&level=${level}`;
+    `&user=${user}&level=${level}&page=${page}&size=${size}`;
+  console.log('api query getEvents', query);
   const request = await fetch(URL + ENDPOINT.event + query, requestOptions)
   const response = await request.json();
   console.log('API: Events|getAll', response);
@@ -96,7 +97,6 @@ async function addEvent(eventData) {
 }
 
 async function removeEvent(id) {
-  console.log('api',)
   const token = getStorage(tokenKeyStorage);
   const requestOptions = {
     method: 'DELETE',
@@ -117,10 +117,22 @@ async function getUser() {
       Authorization: token.token_type + ' ' + token.access_token,
     }
   }
-  const request = await fetch(URL + ENDPOINT.user
-    , requestOptions)
+  const request = await fetch(URL + ENDPOINT.user, requestOptions)
   const response = await request.json();
   console.log('API: User|getAll', response);
+  return response;
+}
+
+async function getUserEmails() {
+  const token = getStorage(tokenKeyStorage);
+  const requestOptions = {
+    headers: {
+      Authorization: token.token_type + ' ' + token.access_token,
+    }
+  }
+  const request = await fetch(URL + ENDPOINT.emails, requestOptions)
+  const response = await request.json();
+  console.log('API: User|getAllEmail', response);
   return response;
 }
 
@@ -131,7 +143,8 @@ async function addUser(userData) {
     body: JSON.stringify(userData),
   }
   const request = await fetch(URL + ENDPOINT.user, requestOptions);
-  const response = request.json();
+  const response = await request.json();
+  console.log('API: User|register', response);
   return response;
 }
 
@@ -175,6 +188,7 @@ export {
   addEvent,
   removeEvent,
   getUser,
+  getUserEmails,
   addUser,
   getToken,
   login
