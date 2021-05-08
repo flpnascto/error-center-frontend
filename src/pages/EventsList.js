@@ -9,9 +9,20 @@ import LoadingPage from '../components/LoadingPage';
 export default function EventsList() {
   const [filterVisible, setFilterVisible] = useState(false);
 
-  const { apiData, setApiData, filterOptions } = useContext(ErrorCenterContext);
+  const { apiData, setApiData, filterOptions, setFilterOptions } = useContext(ErrorCenterContext);
 
   const [loading, setLoading] = useState(false);
+
+  const handlePageChange = (action) => {
+    if (action === 'add') {
+      setFilterOptions({ ...filterOptions, page: filterOptions.page + 1 });
+    };
+
+    if (action === 'sub' && filterOptions.page > 0) {
+      setFilterOptions({ ...filterOptions, page: filterOptions.page - 1 });
+    };
+
+  }
 
   useEffect(() => {
     async function fetchEvents() {
@@ -82,6 +93,12 @@ export default function EventsList() {
                 }
               </tbody>
             </table>
+            { (filterOptions.size > 1) &&
+              (<div>
+                <button onClick={() => handlePageChange('add')}>Próxima</button>
+                <span>{filterOptions.page + 1}</span>
+                { (filterOptions.page > 0) && (<button onClick={() => handlePageChange('sub')}>Anterior</button>)}
+              </div>)}
           </div>
         )
 

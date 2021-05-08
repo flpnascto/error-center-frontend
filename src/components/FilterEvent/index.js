@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react';
 import ErrorCenterContext from '../../context/ErrorCenterContext';
 
+const sizeOptions = [5, 10, 25, 50, 100];
+
 export default function FilterEvent() {
-  const { levelOptions, userOptions, setFilterOptions } = useContext(ErrorCenterContext);
+  const { levelOptions, userOptions, filterOptions, setFilterOptions } = useContext(ErrorCenterContext);
 
   const formValuesInitialState = {
     description: '',
@@ -13,6 +15,7 @@ export default function FilterEvent() {
     selectedLevel: '',
     user: userOptions,
     selectedUser: '',
+    selectedSize: '',
   };
 
   const [formValues, setFormValues] = useState(formValuesInitialState);
@@ -24,34 +27,38 @@ export default function FilterEvent() {
   const handleSubmit = (event) => {
     event.preventDefault();
     setFilterOptions({
+      ...filterOptions,
       description: (formValues.description).toLowerCase(),
       origin: (formValues.origin).toLowerCase(),
       date: formValues.date,
       quantity: formValues.quantity,
       level: formValues.selectedLevel,
       user: formValues.selectedUser,
-      page: 1,
-      size: 50,
+      size: formValues.selectedSize,
     })
   };
 
   const handleResetFilter = () => {
     setFormValues(formValuesInitialState);
     setFilterOptions({
+      ...filterOptions,
       description: '',
       origin: '',
       date: '',
       quantity: '',
       level: '',
       user: '',
-      page: 1,
-      size: 50,
+      page: 0,
+      size: '',
     });
   };
 
   return (
     <div>
       <form className="content" onSubmit={handleSubmit}>
+        <div>
+
+        </div>
         <select
           className="form-input-text"
           value={formValues.selectedLevel}
@@ -62,6 +69,18 @@ export default function FilterEvent() {
             <option key={index} value={option.description}>{option.description}</option>
           ))}
         </select>
+
+        <select
+          className="form-input-text"
+          value={formValues.selectedSize}
+          onChange={(event) => handleChange(event, 'selectedSize')}
+        >
+          <option key="none" value="">Sem filtro</option>
+          {sizeOptions.map((option, index) => (
+            <option key={index} value={option}>{option}</option>
+          ))}
+        </select>/
+
 
         <label className="form-label" htmlFor="description_form">
           Descrição:

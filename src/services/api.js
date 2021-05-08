@@ -68,8 +68,10 @@ async function getEvents(filterOptions) {
     }
   }
   const { description, origin, date, quantity, user, level } = filterOptions;
+  const { page, size } = filterOptions;
   const query = `?description=${description}&origin=${origin}&date=${date}&quantity=${quantity}` +
-    `&user=${user}&level=${level}`;
+    `&user=${user}&level=${level}&page=${page}&size=${size}`;
+  console.log('api query getEvents', query);
   const request = await fetch(URL + ENDPOINT.event + query, requestOptions)
   const response = await request.json();
   console.log('API: Events|getAll', response);

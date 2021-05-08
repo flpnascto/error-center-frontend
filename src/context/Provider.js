@@ -23,8 +23,8 @@ function Provider({ children }) {
     quantity: '',
     level: '',
     user: '',
-    page: 1,
-    size: 50,
+    page: 0,
+    size: '',
   });
 
   const [userOptions, setUserOptions] = useState([])
