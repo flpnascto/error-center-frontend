@@ -21,6 +21,8 @@ export default function EventsList() {
 
   const [loading, setLoading] = useState(false);
 
+  const [deleteRefresh, setDeleteRefresh] = useState(false);
+
   const handlePageChange = (action) => {
     if (action === 'add') {
       setFilterOptions({ ...filterOptions, page: filterOptions.page + 1 });
@@ -40,7 +42,7 @@ export default function EventsList() {
       setLoading(false);
     }
     fetchEvents();
-  }, [filterOptions, setApiData]);
+  }, [filterOptions, setApiData, deleteRefresh]);
 
   const history = useHistory();
 
@@ -61,6 +63,7 @@ export default function EventsList() {
         status: true,
         isEnable: true
       });
+      setDeleteRefresh(!deleteRefresh);
     } else {
       setInfoMessage({
         message: error,
@@ -128,7 +131,6 @@ export default function EventsList() {
                         <td className="row-text-center" >{item.quantity}</td>
                         <td>{item.user}</td>
                         <td className="row-text-center">
-                          {item.id}
                           <button
                             className="button-remove"
                             value={item.id}
@@ -145,9 +147,9 @@ export default function EventsList() {
             </table>
             { (filterOptions.size > 1) &&
               (<div>
-                <button onClick={() => handlePageChange('add')}>Próxima</button>
-                <span>{filterOptions.page + 1}</span>
-                { (filterOptions.page > 0) && (<button onClick={() => handlePageChange('sub')}>Anterior</button>)}
+                { (filterOptions.page > 0) && (<button className="page-button" onClick={() => handlePageChange('sub')}>{`<`}</button>)}
+                <span className="page-text">{filterOptions.page + 1}</span>
+                <button className="page-button" onClick={() => handlePageChange('add')}>{`>`}</button>
               </div>)}
           </div>
         )
