@@ -95,9 +95,9 @@ export default function EventsList() {
             </table>
             { (filterOptions.size > 1) &&
               (<div>
-                <button onClick={() => handlePageChange('add')}>Próxima</button>
-                <span>{filterOptions.page + 1}</span>
-                { (filterOptions.page > 0) && (<button onClick={() => handlePageChange('sub')}>Anterior</button>)}
+                { (filterOptions.page > 0) && (<button className="page-button" onClick={() => handlePageChange('sub')}>{`<`}</button>)}
+                <span className="page-text">{filterOptions.page + 1}</span>
+                <button className="page-button" onClick={() => handlePageChange('add')}>{`>`}</button>
               </div>)}
           </div>
         )
