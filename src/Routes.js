@@ -9,6 +9,7 @@ import UserForm from './pages/UserForm';
 import LevelForm from './pages/LevelForm';
 import UserList from './pages/UserList';
 import EditLevel from './pages/EditLevel';
+import Contact from './pages/Contact';
 
 const Router = () => (
   <Switch>
@@ -20,6 +21,7 @@ const Router = () => (
     <Route path='/user' component={UserForm} />
     <Route path='/level/edit' component={EditLevel} />
     <Route path='/level' component={LevelForm} />
+    <Route path='/contato' component={Contact} />
     <Route exact path="/" component={Welcome} />
   </Switch>
 );

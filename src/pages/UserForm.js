@@ -105,12 +105,12 @@ export default function EventForm() {
           />
         </label>
 
-        <label className="form-label" htmlFor="password_form">
+        <label className="form-label" htmlFor="password_form_confirm">
           Confirmar Password:
             <input
             className="form-input-text"
             id="password_form"
-            type="password"
+            type="password_confirm"
             value={formValues.password_confirm}
             onChange={(event) => handleChange(event, 'password_confirm')}
           />

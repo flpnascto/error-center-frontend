@@ -5,6 +5,7 @@ import UserPanel from '../components/UserPanel';
 import AdminPanel from '../components/AdminPanel';
 import ErrorCenterContext from '../context/ErrorCenterContext';
 import * as api from '../services/api';
+import Footer from '../components/Footer';
 
 export default function Welcome() {
   const { login, setLogin, setLevelOptions, setUserOptions } = useContext(ErrorCenterContext);
@@ -56,7 +57,7 @@ export default function Welcome() {
   </div>)
 
   return (
-    <div>
+    <div className="container">
       <Header />
       <div className="content">
         {!login.isLogged && doLogin}
@@ -98,6 +99,7 @@ export default function Welcome() {
           </button>)
         }
       </div>
+      <Footer />
     </div>
   );
 }
